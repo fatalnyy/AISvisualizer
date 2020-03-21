@@ -47,8 +47,8 @@ namespace AISvisualizer.Controllers
         {
             try
             {
-                var files = Request.Form.Files.Where(p => p.FileName != "saveToDb").ToList();
-                var saveToDb = Convert.ToBoolean(Request.Form.Files.Where(p => p.FileName == "saveTpDb").FirstOrDefault());
+                var files = Request.Form.Files.ToList();
+                var saveToDb = Convert.ToBoolean(Request.Form.Keys.FirstOrDefault());
                 var lineContents = _fileService.GetLineContents(files);
                 var messages = new List<Message>();
                 await foreach (var lineContent in lineContents)

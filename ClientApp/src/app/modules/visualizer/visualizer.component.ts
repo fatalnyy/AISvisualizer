@@ -24,9 +24,9 @@ export class VisualizerComponent implements OnInit {
   upload(files) {
     if (files.length === 0)
       return;
-    let saveToDb: boolean = false;
+    let saveToDb: string = String(true);
     const formData = new FormData();
-    formData.append("saveToDb", String(saveToDb));
+    formData.append(saveToDb, "saveToDb");
 
     for (let file of files)
       formData.append(file.name, file);
