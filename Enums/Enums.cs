@@ -103,6 +103,27 @@ namespace AISvisualizer.Enums
             NotDefined = 15,
         }
 
+        public enum EPFDfixTypes
+        {
+            [Description("Undefined")]
+            Undefined = 0,
+            [Description("GPS")]
+            GPS = 1,
+            [Description("GLONASS")]
+            GLONASS = 2,
+            [Description("Combined GPS/GLONASS")]
+            Combined = 3,
+            [Description("Loran-C")]
+            Loran = 4,
+            [Description("Chayka")]
+            Chayka = 5,
+            [Description("Integrated navigation system")]
+            Integrated = 6,
+            [Description("Surveyed")]
+            Surveyed = 7,
+            [Description("Galileo")]
+            Galileo = 8
+        }
         public static string GetEnumDescription(Enum value)
         {
             FieldInfo fi = value.GetType().GetField(value.ToString());
