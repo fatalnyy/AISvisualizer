@@ -6,7 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-visualizer',
   templateUrl: './visualizer.component.html',
-  styleUrls: ['./visualizer.component.css']
+  styleUrls: ['./visualizer.component.scss']
 })
 export class VisualizerComponent implements OnInit {
 
@@ -25,7 +25,7 @@ export class VisualizerComponent implements OnInit {
   upload(files) {
     if (files.length === 0)
       return;
-    let saveToDb: string = String(false);
+    let saveToDb: string = String(true);
     const formData = new FormData();
     formData.append(saveToDb, "saveToDb");
 

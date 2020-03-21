@@ -198,7 +198,7 @@ namespace AISvisualizer.Services
             else if (timeStamp == 62) return "System in estimated mode";
             else if (timeStamp == 63) return "System inoperative";
 
-            return string.Format("{0} [s]", timeStamp.ToString());
+            return string.Format("{0}", timeStamp.ToString());
         }
 
         public string GetManeuverIndicator()
