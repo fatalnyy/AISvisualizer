@@ -13,6 +13,7 @@ import { VisualizerComponent } from './modules/visualizer/visualizer.component';
 import { VisualizerModule } from './modules/visualizer/visualizer.module';
 import { MessagesListModule } from './modules/messages-list/messages-list.module';
 import { ToastrModule } from 'ngx-toastr';
+import { MessagesListComponent } from './modules/messages-list/messages-list.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { ToastrModule } from 'ngx-toastr';
       { path: '', component: VisualizerComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
+      { path: 'messages', component: MessagesListComponent },
     ])
   ],
   providers: [],

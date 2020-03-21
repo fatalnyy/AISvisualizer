@@ -28,6 +28,7 @@ namespace AISvisualizer.Controllers
         }
 
         [HttpGet]
+        [Route("GetAllMessages")]
         public IActionResult GetMessages()
         {
             try
