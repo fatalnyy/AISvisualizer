@@ -12,6 +12,7 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { VisualizerComponent } from './modules/visualizer/visualizer.component';
 import { VisualizerModule } from './modules/visualizer/visualizer.module';
 import { MessagesListModule } from './modules/messages-list/messages-list.module';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { MessagesListModule } from './modules/messages-list/messages-list.module
     FormsModule,
     VisualizerModule,
     MessagesListModule,
+    ToastrModule.forRoot(),
     RouterModule.forRoot([
       { path: '', component: VisualizerComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
