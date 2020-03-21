@@ -1,0 +1,11 @@
+﻿{
+  "ConnectionStrings": {
+    "AisConnectionString": "server=(localdb)\\ProjectsV13;Database=AISDb;Integrated Security=true;MultipleActiveResultSets=true;"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft":  "Warning"
+    }
+  }
+}
