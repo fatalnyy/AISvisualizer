@@ -11,7 +11,7 @@ namespace AISvisualizer.Models
         public string FixQuality { get; set; }
         public double Longitude { get; set; }
         public double Latitude { get; set; }
-        public string FixType { get; set; }
+        public string EPFD { get; set; }
         public string RAIM { get; set; }
     }
 }

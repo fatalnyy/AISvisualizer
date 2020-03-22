@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AISvisualizer.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,12 +32,25 @@ namespace AISvisualizer.Services
                 var x = Convert.ToString(asciiByte, 2).PadLeft(6, '0');
                 binaryPayload.Append(x);
             }
+
+            //var remainder = (binaryPayload.Length + numFillBits) % 6;
+            //if (remainder != 0)
+            //{
+            //    numFillBits += 6 - remainder;
+            //}
+
+            //if (numFillBits > 0)
+            //{
+            //    binaryPayload.Append(new string('0', numFillBits));
+            //}
             return binaryPayload.ToString();
         }
 
         public string ExtractBinaryFieldValue(string binaryPayload, int startIndex, int length)
         {
+            if (startIndex > binaryPayload.Length) return "0";
+
             return binaryPayload.Substring(startIndex, length);
-        }       
+        }        
     }
 }

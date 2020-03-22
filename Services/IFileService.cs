@@ -10,5 +10,6 @@ namespace AISvisualizer.Services
     public interface IFileService
     {
         IAsyncEnumerable<LineContent> GetLineContents(IEnumerable<IFormFile> files);
+        bool CheckHeader(string header);
     }
 }

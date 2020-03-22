@@ -51,22 +51,24 @@ namespace AISvisualizer.Controllers
                 var files = Request.Form.Files.ToList();
                 var saveToDb = Convert.ToBoolean(Request.Form.Keys.FirstOrDefault());
                 var lineContents = _fileService.GetLineContents(files);
-                var messages = new List<Message>();
-                await foreach (var lineContent in lineContents)
-                {
-                    var decodedMessage = _decodeService.GetDecodedMessage(lineContent.AISmessage.Payload);
 
-                    if (decodedMessage != null) messages.Add(decodedMessage);
-                }
+                var decodedMessages = await _decodeService.GetDecodedMessage(lineContents);
+                //var messages = new List<Message>();
+                //await foreach (var lineContent in lineContents)
+                //{
+                //    var decodedMessage = _decodeService.GetDecodedMessage(lineContent.AISmessage.Payload);
 
-                if (saveToDb)
-                {
-                    _repository.AddMessages(messages);
-                    _repository.SaveAll();
+                //    if (decodedMessage != null) messages.Add(decodedMessage);
+                //}
 
-                    return Created("/api/AISMessages", messages.ToArray());
-                }
-                return Ok(messages.ToArray());
+                //if (saveToDb)
+                //{
+                //    //_repository.AddMessages(messages);
+                //    _repository.SaveAll();
+
+                //    //return Created("/api/AISMessages", messages.ToArray());
+                //}
+                return Ok(decodedMessages);
             }
             catch (Exception ex)
             {

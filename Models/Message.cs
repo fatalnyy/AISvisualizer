@@ -11,6 +11,11 @@ namespace AISvisualizer.Models
         public string MessageType { get; set; }
         public Int16 Repeat { get; set; }
         public Int64 MMSI { get; set; }
+
+    }
+    
+    public class MessageType1 : Message
+    {
         public string Status { get; set; }
         public Int16? ROT { get; set; }
         public double? SOG { get; set; }
@@ -23,4 +28,7 @@ namespace AISvisualizer.Models
         public string Maneuver { get; set; }
         public string RAIM { get; set; }
     }
+
+    public class MessageType2 : MessageType1 { }
+    public class MessageType3 : MessageType2 { }
 }

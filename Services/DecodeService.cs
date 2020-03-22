@@ -10,48 +10,187 @@ namespace AISvisualizer.Services
     public class DecodeService : IDecodeService
     {
         public string BinaryPayload { get; set; }
+        public string FragmentOfPayload { get; set; }
+        public string EncodedPayload { get; set; }
         private readonly IExtractService _extractService;
         public DecodeService(IExtractService extractService)
         {
             _extractService = extractService;
         }
 
-        public Message GetDecodedMessage(string payload)
+        public async Task<DecodedMessages> GetDecodedMessage(IAsyncEnumerable<LineContent> lineContents)
         {
-            BinaryPayload = _extractService.GetBinaryPayload(payload);
-            var messageType = GetMessageType();
+            var decodedMessages = new DecodedMessages();
 
-            if (messageType > 0)
+            await foreach (var lineContent in lineContents)
             {
-                switch (messageType)
-                {
-                    case (Int16)Enums.Enums.MessageTypes.MessageType1:
-                    case (Int16)Enums.Enums.MessageTypes.MessageType2:
-                    case (Int16)Enums.Enums.MessageTypes.MessageType3:
-                        return new Message
-                        {
-                            MessageType = Enums.Enums.GetEnumDescription<Enums.Enums.MessageTypes>(messageType),
-                            Repeat = GetRepeatIndicator(),
-                            MMSI = GetMMSI(),
-                            Status = GetNavigationStatus(),
-                            ROT = GetRateOfTurn(),
-                            SOG = GetSpeedOverGround(),
-                            Accuracy = GetPositionAccuracy(),
-                            Longitude = GetLongitude(),
-                            Latitude = GetLatitude(),
-                            COG = GetCourseOverGround(),
-                            HDG = GetTrueHeading(),
-                            Timestamp = GetTimestamp(),
-                            Maneuver = GetManeuverIndicator(),
-                            RAIM = GetRAIMFlag()
-                        };
-                    default:
-                        return null;
-                }
-            }
-            else
-                return null;
+                var numSentences = Convert.ToInt32(lineContent.AISmessage.MessageCount);
+                //var numFillBits = Convert.ToInt32(lineContent.AISmessage.Size);
+                var fragmentNumber = Convert.ToInt32(lineContent.AISmessage.MessageNumber);
 
+                if (numSentences > 1 && fragmentNumber == 1)
+                {
+                    FragmentOfPayload = lineContent.AISmessage.Payload;
+                    continue;
+                }
+
+                if (numSentences > 1 && fragmentNumber == 2)
+                    EncodedPayload = FragmentOfPayload + lineContent.AISmessage.Payload;
+                else
+                    EncodedPayload = lineContent.AISmessage.Payload;
+
+                BinaryPayload = _extractService.GetBinaryPayload(EncodedPayload);
+                var messageType = GetMessageType();
+
+                if (messageType > 0)
+                {
+                    switch (messageType)
+                    {
+                        case (Int16)Enums.Enums.MessageTypes.MessageType1:
+                            MessageType1 messageType1 = GetMessageType123(messageType);
+                            decodedMessages.MessageType1s.Add(messageType1);
+                            break;
+                        case (Int16)Enums.Enums.MessageTypes.MessageType2:
+                            MessageType2 messageType2 = GetMessageType123(messageType);
+                            decodedMessages.MessageType2s.Add(messageType2);
+                            break;
+                        case (Int16)Enums.Enums.MessageTypes.MessageType3:
+                            MessageType3 messageType3 = GetMessageType123(messageType);
+                            decodedMessages.MessageType3s.Add(messageType3);
+                            break;
+                        case (Int16)Enums.Enums.MessageTypes.MessageType4:
+                            MessageType4 messageType4 = GetMessageType4(messageType);
+                            decodedMessages.MessageType4s.Add(messageType4);
+                            break;
+                        case (Int16)Enums.Enums.MessageTypes.MessageType5:
+                            MessageType5 messageType5 = GetMessageType5(messageType);
+                            decodedMessages.MessageType5s.Add(messageType5);
+                            break;
+                        case (Int16)Enums.Enums.MessageTypes.MessageType9:
+                            MessageType9 messageType9 = GetMessageType9(messageType);
+                            decodedMessages.MessageType9s.Add(messageType9);
+                            break;
+                        case (Int16)Enums.Enums.MessageTypes.MessageType21:
+                            MessageType21 messageType21 = GetMessageType21(messageType);
+                            decodedMessages.MessageType21s.Add(messageType21);
+                            break;
+                        default:
+                            continue;
+                    }
+                }
+                else
+                    continue;
+            }
+            return decodedMessages;         
+        }
+
+        public MessageType3 GetMessageType123(Int16 messageType)
+        {
+            return new MessageType3
+            {
+                MessageType = Enums.Enums.GetEnumDescription<Enums.Enums.MessageTypes>(messageType),
+                Repeat = GetRepeatIndicator(),
+                MMSI = GetMMSI(),
+                Status = GetNavigationStatus(),
+                ROT = GetRateOfTurn(),
+                SOG = GetSpeedOverGround(50, 10),
+                Accuracy = GetPositionAccuracy(60, 1),
+                Longitude = GetLongitude(61, 28),
+                Latitude = GetLatitude(89, 27),
+                COG = GetCourseOverGround(116, 12),
+                HDG = GetTrueHeading(),
+                Timestamp = GetTimestamp(137, 6),
+                Maneuver = GetManeuverIndicator(),
+                RAIM = GetRAIMFlag(148, 1)
+            };
+        }
+
+        public MessageType4 GetMessageType4(Int16 messageType)
+        {
+            return new MessageType4
+            {
+                MessageType = Enums.Enums.GetEnumDescription<Enums.Enums.MessageTypes>(messageType),
+                Repeat = GetRepeatIndicator(),
+                MMSI = GetMMSI(),
+                Date = GetDateOfMessageType4(),
+                FixQuality = GetPositionAccuracy(78, 1),
+                Longitude = GetLongitude(79, 28),
+                Latitude = GetLatitude(107, 27),
+                EPFD = GetEPFD(134, 4),
+                RAIM = GetRAIMFlag(148, 1)
+            };
+        }
+
+        public MessageType5 GetMessageType5(Int16 messageType)
+        {
+            return new MessageType5
+            {
+                MessageType = Enums.Enums.GetEnumDescription<Enums.Enums.MessageTypes>(messageType),
+                Repeat = GetRepeatIndicator(),
+                MMSI = GetMMSI(),
+                AISversion = GetAISversion(),
+                IMOnumber = GetIMOnumber(),
+                CallSign = GetString(70, 42),
+                VesselName = GetString(112, 120),
+                ShipType = GetShipType(),
+                DimensionToBow = GetDimensionToBowOrToStern(240, 9),
+                DimensionToStern = GetDimensionToBowOrToStern(249, 9),
+                DimensionToPort = GetDimensionToPortOrToStarboard(258, 6),
+                DimensionToStarboard = GetDimensionToPortOrToStarboard(264, 6),
+                EPFD = GetEPFD(270, 4),
+                Month = GetPartOfDate(274, 4, true),
+                Day = GetPartOfDate(278, 5, false, true),
+                Hour = GetPartOfDate(283, 5, false, false, true),
+                Minute = GetPartOfDate(288, 6, false, false, false, true),
+                Draught = GetDraught(294, 8),
+                Destination = GetString(302, 120),
+                DTE = GetDTE(422, 1)
+            };
+        }
+
+        public MessageType9 GetMessageType9(Int16 messageType)
+        {
+            return new MessageType9
+            {
+                MessageType = Enums.Enums.GetEnumDescription<Enums.Enums.MessageTypes>(messageType),
+                Repeat = GetRepeatIndicator(),
+                MMSI = GetMMSI(),
+                Altitude = GetAltitude(38, 12),
+                SOG = GetSpeedOverGround(50, 10),
+                Accuracy = GetPositionAccuracy(60, 1),
+                Longitude = GetLongitude(61, 28),
+                Latitude = GetLatitude(89, 27),
+                COG = GetCourseOverGround(116, 12),
+                Timestamp = GetTimestamp(128, 6),
+                DTE = GetDTE(142, 1),
+                Assigned = GetAssinged(146, 1),
+                RAIM = GetRAIMFlag(147, 1)
+            };
+        }
+
+        public MessageType21 GetMessageType21(Int16 messageType)
+        {
+            return new MessageType21
+            {
+                MessageType = Enums.Enums.GetEnumDescription<Enums.Enums.MessageTypes>(messageType),
+                Repeat = GetRepeatIndicator(),
+                MMSI = GetMMSI(),
+                AidType = GetAidType(),
+                Name = GetString(43, 120),
+                Accuracy = GetPositionAccuracy(163, 1),
+                Longitude = GetLongitude(164, 28),
+                Latitude = GetLatitude(192, 27),
+                DimensionToBow = GetDimensionToBowOrToStern(219, 9),
+                DimensionToStern = GetDimensionToBowOrToStern(228, 9),
+                DimensionToPort = GetDimensionToPortOrToStarboard(237, 6),
+                DimensionToStarboard = GetDimensionToPortOrToStarboard(243, 6),
+                EPFD = GetEPFD(249, 4),
+                Second = GetTimestamp(253, 6),
+                OffPosition = GetOffPositionIndicator(),
+                RAIM = GetRAIMFlag(268, 1),
+                VirtualAidFlag = GetVirtualAidFlag(),
+                Assigned = GetAssinged(270, 1)
+            };
         }
 
         public Int16 GetMessageType()
@@ -113,9 +252,9 @@ namespace AISvisualizer.Services
             return (Int16)ROT_sensor;
         }
 
-        public double? GetSpeedOverGround()
+        public double? GetSpeedOverGround(int startIndex, int length)
         {
-            var binSOG = _extractService.ExtractBinaryFieldValue(BinaryPayload, 50, 10);
+            var binSOG = _extractService.ExtractBinaryFieldValue(BinaryPayload, startIndex, length);
             var convertedSOG = Convert.ToInt16(binSOG, 2);
 
             if (convertedSOG == 1023) return null; // "Not available SOG";
@@ -125,9 +264,9 @@ namespace AISvisualizer.Services
             return Math.Round(SOG, 3);
         }
 
-        public string GetPositionAccuracy()
+        public string GetPositionAccuracy(int startIndex, int length)
         {
-            var binPositionAccuracy = _extractService.ExtractBinaryFieldValue(BinaryPayload, 60, 1);
+            var binPositionAccuracy = _extractService.ExtractBinaryFieldValue(BinaryPayload, startIndex, length);
             var positionAccuracy = Convert.ToInt16(binPositionAccuracy, 2);
 
             if (positionAccuracy == 1) return "<10m";
@@ -135,9 +274,9 @@ namespace AISvisualizer.Services
             else return "Error";
         }
 
-        public double GetLongitude()
+        public double GetLongitude(int startIndex, int length)
         {
-            var binLongitude = _extractService.ExtractBinaryFieldValue(BinaryPayload, 61, 28);
+            var binLongitude = _extractService.ExtractBinaryFieldValue(BinaryPayload, startIndex, length);
             var convertedLongitude = Convert.ToInt64(binLongitude, 2);
 
             if (binLongitude[0] == '1')
@@ -149,9 +288,9 @@ namespace AISvisualizer.Services
             return Math.Round(longitude, 6);
         }
 
-        public double GetLatitude()
+        public double GetLatitude(int startIndex, int length)
         {
-            var binLatitude = _extractService.ExtractBinaryFieldValue(BinaryPayload, 89, 27);
+            var binLatitude = _extractService.ExtractBinaryFieldValue(BinaryPayload, startIndex, length);
             var convertedLatitude = Convert.ToInt64(binLatitude, 2);
 
             if (binLatitude[0] == '1')
@@ -163,9 +302,9 @@ namespace AISvisualizer.Services
             return Math.Round(latitude, 6);
         }
 
-        public double? GetCourseOverGround()
+        public double? GetCourseOverGround(int startIndex, int length)
         {
-            var binCOG = _extractService.ExtractBinaryFieldValue(BinaryPayload, 116, 12);
+            var binCOG = _extractService.ExtractBinaryFieldValue(BinaryPayload, startIndex, length);
             var convertedCOG = Convert.ToInt16(binCOG, 2);
 
             if (convertedCOG == 3600) return null; // "Not available";
@@ -188,9 +327,9 @@ namespace AISvisualizer.Services
             return trueHeading;
         }
 
-        public string GetTimestamp()
+        public string GetTimestamp(int startIndex, int length)
         {
-            var binTimeStamp = _extractService.ExtractBinaryFieldValue(BinaryPayload, 137, 6);
+            var binTimeStamp = _extractService.ExtractBinaryFieldValue(BinaryPayload, startIndex, length);
             var timeStamp = Convert.ToInt16(binTimeStamp, 2);
 
             if (timeStamp == 60) return "Not available";
@@ -219,9 +358,9 @@ namespace AISvisualizer.Services
             }
         }
 
-        public string GetRAIMFlag()
+        public string GetRAIMFlag(int startIndex,int length)
         {
-            var binRAIMFlag = _extractService.ExtractBinaryFieldValue(BinaryPayload, 148, 1);
+            var binRAIMFlag = _extractService.ExtractBinaryFieldValue(BinaryPayload, startIndex, length);
             var RAIMFlag = Convert.ToInt16(binRAIMFlag, 2);
 
             if (RAIMFlag == 1) return "In use";
@@ -233,6 +372,196 @@ namespace AISvisualizer.Services
         {
             return null;
             //return binaryPayload.Substring(149, 19);
+        }
+
+        public DateTime? GetDateOfMessageType4()
+        {
+            var binYear = _extractService.ExtractBinaryFieldValue(BinaryPayload, 38, 14);
+            var year = Convert.ToInt16(binYear, 2);
+
+            if (year == 0) return null;
+
+            var binMonth = _extractService.ExtractBinaryFieldValue(BinaryPayload, 52, 4);
+            var month = Convert.ToInt16(binMonth, 2);
+
+            if (month == 0) return null;
+
+            var binDay = _extractService.ExtractBinaryFieldValue(BinaryPayload, 56, 5);
+            var day = Convert.ToInt16(binDay, 2);
+
+            if (day == 0) return null;
+
+            var date = new DateTime(year, month, day);
+
+            var binHour = _extractService.ExtractBinaryFieldValue(BinaryPayload, 61, 5);
+            var hour = Convert.ToInt16(binHour, 2);
+
+            if (hour == 0) return date;
+
+            var binMinute = _extractService.ExtractBinaryFieldValue(BinaryPayload, 66, 6);
+            var minute = Convert.ToInt16(binMinute, 2);
+
+            if (minute == 0) return date;
+
+            var binSecond = _extractService.ExtractBinaryFieldValue(BinaryPayload, 72, 6);
+            var second = Convert.ToInt16(binSecond, 2);
+
+            date = new DateTime(year, month, day, hour, minute, second);
+
+            return date;
+        }
+
+        public string GetEPFD(int startIndex, int length)
+        {
+            var binEPFD = _extractService.ExtractBinaryFieldValue(BinaryPayload, startIndex, length);
+            var EPFD = Convert.ToInt16(binEPFD, 2);
+
+            if (EPFD > 8) return ("Undefined");
+            return Enums.Enums.GetEnumDescription<Enums.Enums.EPFDfixTypes>(EPFD);
+        }
+
+        public string GetAISversion()
+        {
+            var binVersion = _extractService.ExtractBinaryFieldValue(BinaryPayload, 38, 2);
+            var version = Convert.ToInt16(binVersion, 2);
+
+            if (version == 0) return "ITU1371";
+            else if (version > 0 && version < 4) return "Future editions";
+            else return "Error";
+        }
+
+        public Int64 GetIMOnumber()
+        {
+            var binIMOnumber = _extractService.ExtractBinaryFieldValue(BinaryPayload, 40, 30);
+            var IMOnumber = Convert.ToInt64(binIMOnumber, 2);
+
+            return IMOnumber;
+        }
+
+        public string GetString(int startIndex, int length)
+        {
+            var binStringData = _extractService.ExtractBinaryFieldValue(BinaryPayload, startIndex, length);
+
+            var value = string.Empty;
+            for (var i = 0; i < binStringData.Length / 6; i++)
+            {
+                var b = Convert.ToByte(binStringData.Substring(i * 6, 6), 2);
+
+                if (b < 32) //convert to 6-bit ASCII, chars to uppercase latins
+                    b = (byte)(b + 64);
+
+                if (b != 64)
+                    value = value + (char)b;
+            }
+
+            return value.Trim();
+        }
+
+        public string GetShipType()
+        {
+            var binShipType = _extractService.ExtractBinaryFieldValue(BinaryPayload, 232, 8);
+            var shipType = Convert.ToInt16(binShipType, 2);
+
+            if (shipType > 99) return ("Invalid Ship Type!");
+            return Enum.ToObject(typeof(Enums.Enums.ShipType), shipType).ToString();
+        }
+
+        public string GetDimensionToBowOrToStern(int startIndex, int length)
+        {
+            var binDimension = _extractService.ExtractBinaryFieldValue(BinaryPayload, startIndex, length);
+            var dimension = Convert.ToInt16(binDimension, 2);
+
+            if (dimension == 511) return ">511";
+            return dimension.ToString();
+        }
+
+        public string GetDimensionToPortOrToStarboard(int startIndex, int length)
+        {
+            var binDimension = _extractService.ExtractBinaryFieldValue(BinaryPayload, startIndex, length);
+            var dimension = Convert.ToInt16(binDimension, 2);
+
+            if (dimension == 63) return ">63";
+            return dimension.ToString();
+        }
+
+        public Int16? GetPartOfDate(int startIndex, int length, bool month = false, bool day = false, bool hour = false, bool minute = false)
+        {
+            var binValue = _extractService.ExtractBinaryFieldValue(BinaryPayload, startIndex, length);
+            var value = Convert.ToInt16(binValue, 2);
+
+            if (month && value == 0) return null;
+            if (day && value == 0) return null;
+            if (hour && value == 24) return null;
+            if (minute && value == 60) return null;
+
+            return value;
+        }
+
+        public double GetDraught(int startIndex, int length)
+        {
+            var binDraught = _extractService.ExtractBinaryFieldValue(BinaryPayload, startIndex, length);
+            var convertedDraught = Convert.ToInt16(binDraught, 2);
+
+            double draught = (double)convertedDraught/ 10;
+
+            return draught;
+        }
+
+        public string GetDTE(int startIndex, int length)
+        {
+            var binDTE = _extractService.ExtractBinaryFieldValue(BinaryPayload, startIndex, length);
+            var DTE = Convert.ToInt16(binDTE, 2);
+
+            if (DTE == 0) return "Data terminal ready";
+            else if (DTE == 1) return "Not ready";
+            else return "Error";
+        }
+
+        public string GetAltitude(int startIndex, int length)
+        {
+            var binAlt = _extractService.ExtractBinaryFieldValue(BinaryPayload, startIndex, length);
+            var alt = Convert.ToInt16(binAlt, 2);
+
+            if (alt == 4095) return "Not available";
+            else if (alt == 4094) return ">= 4094";
+            else return alt.ToString();
+        }
+
+        public string GetAssinged(int startIndex, int length)
+        {
+            var binAssigned = _extractService.ExtractBinaryFieldValue(BinaryPayload, startIndex, length);
+            var assigned = Convert.ToInt16(binAssigned, 2);
+
+            if (assigned == 0) return "Autonomous mode";
+            else return "Assigned mode";
+        }
+
+        public string GetAidType()
+        {
+            var binAid = _extractService.ExtractBinaryFieldValue(BinaryPayload, 38, 5);
+            var aid = Convert.ToInt16(binAid, 2);
+
+            if (aid > 31) return ("Invalid Aid Type!");
+            return Enums.Enums.GetEnumDescription<Enums.Enums.AidType>(aid);
+
+        }
+
+        public string GetOffPositionIndicator()
+        {
+            var binOffPosition = _extractService.ExtractBinaryFieldValue(BinaryPayload, 259, 1);
+            var offPosition = Convert.ToInt16(binOffPosition, 2);
+
+            if (offPosition == 0) return "On position";
+            else return "Off position";
+        }
+
+        public string GetVirtualAidFlag()
+        {
+            var binAidFlag = _extractService.ExtractBinaryFieldValue(BinaryPayload, 269, 1);
+            var aidFlag = Convert.ToInt16(binAidFlag, 2);
+
+            if (aidFlag == 0) return "Real AtoN";
+            else return "Virtual AtoN";
         }
     }
 }
