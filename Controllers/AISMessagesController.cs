@@ -61,13 +61,13 @@ namespace AISvisualizer.Controllers
                 //    if (decodedMessage != null) messages.Add(decodedMessage);
                 //}
 
-                //if (saveToDb)
-                //{
-                //    //_repository.AddMessages(messages);
-                //    _repository.SaveAll();
+                if (saveToDb)
+                {
+                    _repository.AddMessages(decodedMessages.MessageType5s);
+                    _repository.SaveAll();
 
-                //    //return Created("/api/AISMessages", messages.ToArray());
-                //}
+                    return Created("/api/AISMessages", decodedMessages);
+                }
                 return Ok(decodedMessages);
             }
             catch (Exception ex)

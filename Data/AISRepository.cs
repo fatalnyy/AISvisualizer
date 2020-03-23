@@ -17,11 +17,11 @@ namespace AISvisualizer.Data
             _logger = logger;
         }
 
-        public IEnumerable<Message> GetAllMessages()
+        public IEnumerable<MessageType123> GetAllMessages()
         {
             try
             {
-                return _ctx.Messages.OrderBy(p => p.Id).ToList();
+                return null;
             }
             catch (Exception ex)
             {
@@ -30,7 +30,7 @@ namespace AISvisualizer.Data
             }
         }
 
-        public void AddMessages(IEnumerable<Message> messages)
+        public void AddMessages(IEnumerable<MessageType5> messages)
         {
             try
             {

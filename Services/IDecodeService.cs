@@ -10,7 +10,7 @@ namespace AISvisualizer.Services
     {
         string BinaryPayload { get; set; }
         Task<DecodedMessages> GetDecodedMessage(IAsyncEnumerable<LineContent> lineContents);
-        MessageType3 GetMessageType123(Int16 messageType);
+        public MessageType123 GetMessageType123(Int16 messageType);
         MessageType4 GetMessageType4(Int16 messageType);
         MessageType5 GetMessageType5(Int16 messageType);
         MessageType9 GetMessageType9(Int16 messageType);

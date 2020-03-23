@@ -5,8 +5,8 @@ namespace AISvisualizer.Data
 {
     public interface IAISRepository
     {
-        IEnumerable<Message> GetAllMessages();
-        void AddMessages(IEnumerable<Message> messages);
+        IEnumerable<MessageType123> GetAllMessages();
+        void AddMessages(IEnumerable<MessageType5> messages);
         bool SaveAll();
     }
 }

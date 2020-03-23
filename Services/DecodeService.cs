@@ -47,16 +47,10 @@ namespace AISvisualizer.Services
                     switch (messageType)
                     {
                         case (Int16)Enums.Enums.MessageTypes.MessageType1:
-                            MessageType1 messageType1 = GetMessageType123(messageType);
-                            decodedMessages.MessageType1s.Add(messageType1);
-                            break;
                         case (Int16)Enums.Enums.MessageTypes.MessageType2:
-                            MessageType2 messageType2 = GetMessageType123(messageType);
-                            decodedMessages.MessageType2s.Add(messageType2);
-                            break;
                         case (Int16)Enums.Enums.MessageTypes.MessageType3:
-                            MessageType3 messageType3 = GetMessageType123(messageType);
-                            decodedMessages.MessageType3s.Add(messageType3);
+                            MessageType123 messageType123 = GetMessageType123(messageType);
+                            decodedMessages.MessageType123s.Add(messageType123);
                             break;
                         case (Int16)Enums.Enums.MessageTypes.MessageType4:
                             MessageType4 messageType4 = GetMessageType4(messageType);
@@ -84,9 +78,9 @@ namespace AISvisualizer.Services
             return decodedMessages;         
         }
 
-        public MessageType3 GetMessageType123(Int16 messageType)
+        public MessageType123 GetMessageType123(Int16 messageType)
         {
-            return new MessageType3
+            return new MessageType123
             {
                 MessageType = Enums.Enums.GetEnumDescription<Enums.Enums.MessageTypes>(messageType),
                 Repeat = GetRepeatIndicator(),

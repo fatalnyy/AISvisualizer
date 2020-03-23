@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace AISvisualizer.Models
 {
-    public class MessageType21 : Message
+    public class MessageType21
     {
+        public string MessageType { get; set; }
+        public Int16 Repeat { get; set; }
+        [Key]
+        public Int64 MMSI { get; set; }
         public string AidType { get; set; }
         public string Name { get; set; }
         public string Accuracy { get; set; }

@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace AISvisualizer.Models
 {
-    public class MessageType5 : Message
+    public class MessageType5
     {
+        public string MessageType { get; set; }
+        public Int16 Repeat { get; set; }
+        [Key]
+        public Int64 MMSI { get; set; }
         public string AISversion { get; set; }
         public Int64 IMOnumber { get; set; }
         public string CallSign { get; set; }
