@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AISvisualizer.Enums;
 using AISvisualizer.Models;
@@ -566,40 +567,45 @@ namespace AISvisualizer.Services
         public string GetCountry()
         {
             var mmsi = GetMMSI().ToString();
-            var firstDigit = Convert.ToInt32(mmsi[0]);
-
-            if (firstDigit == 8) return Enum.ToObject(typeof(Enums.Enums.MIDcountries), mmsi.Substring(1, 3)).ToString();
-            else if (firstDigit >= 2 && firstDigit <= 7) return Enum.ToObject(typeof(Enums.Enums.MIDcountries), mmsi.Substring(0, 3)).ToString();
+            var firstDigit = Convert.ToInt32(mmsi.Substring(0, 1));
+            var country = "";
+            
+            if (firstDigit == 8) country = Enum.ToObject(typeof(Enums.Enums.MIDcountries), Convert.ToInt32(mmsi.Substring(1, 3))).ToString();
+            else if (firstDigit >= 2 && firstDigit <= 7) country = Enum.ToObject(typeof(Enums.Enums.MIDcountries), Convert.ToInt32(mmsi.Substring(0, 3))).ToString();
             else if (firstDigit == 0)
             {
-                var secondDigit = Convert.ToInt32(mmsi[1]);
+                var secondDigit = Convert.ToInt32(mmsi.Substring(1, 1));
 
-                if (secondDigit == 0) return Enum.ToObject(typeof(Enums.Enums.MIDcountries), mmsi.Substring(2, 3)).ToString();
-                else return Enum.ToObject(typeof(Enums.Enums.MIDcountries), mmsi.Substring(1, 3)).ToString();
+                if (secondDigit == 0) country = Enum.ToObject(typeof(Enums.Enums.MIDcountries), Convert.ToInt32(mmsi.Substring(2, 3))).ToString();
+                else country = Enum.ToObject(typeof(Enums.Enums.MIDcountries), Convert.ToInt32(mmsi.Substring(1, 3))).ToString();
             }
             else if (firstDigit == 1)
             {
-                var secondDigit = Convert.ToInt32(mmsi[1]);
-                var thirdDigit = Convert.ToInt32(mmsi[2]);
+                var secondDigit = Convert.ToInt32(mmsi.Substring(1, 1));
+                var thirdDigit = Convert.ToInt32(mmsi.Substring(2, 1));
 
-                if (secondDigit == 1 && thirdDigit == 1) return Enum.ToObject(typeof(Enums.Enums.MIDcountries), mmsi.Substring(4, 3)).ToString();
-                else return null;
+                if (secondDigit == 1 && thirdDigit == 1) country = Enum.ToObject(typeof(Enums.Enums.MIDcountries), Convert.ToInt32(mmsi.Substring(4, 3))).ToString();
+                else country = null;
             }
             else if (firstDigit == 9)
             {
-                var secondDigit = Convert.ToInt32(mmsi[1]);
+                var secondDigit = Convert.ToInt32(mmsi.Substring(1, 1));
 
-                if (secondDigit == 9 || secondDigit == 8) return Enum.ToObject(typeof(Enums.Enums.MIDcountries), mmsi.Substring(2, 3)).ToString();
+                if (secondDigit == 9 || secondDigit == 8) country = Enum.ToObject(typeof(Enums.Enums.MIDcountries), Convert.ToInt32(mmsi.Substring(2, 3))).ToString();
                 else if (secondDigit == 7)
                 {
-                    var thirdDigit = Convert.ToInt32(mmsi[2]);
+                    var thirdDigit = Convert.ToInt32(mmsi.Substring(2, 1));
 
-                    if (thirdDigit == 0) return Enum.ToObject(typeof(Enums.Enums.MIDcountries), mmsi.Substring(3, 3)).ToString();
-                    else return null;
+                    if (thirdDigit == 0) country = Enum.ToObject(typeof(Enums.Enums.MIDcountries), Convert.ToInt32(mmsi.Substring(3, 3))).ToString();
+                    else country = null;
                 }
-                else return null;
+                else country = null;
             }
-            else return null;
+            else country = null;
+
+            if (!string.IsNullOrWhiteSpace(country)) country = Regex.Replace(country, @"[\d-]", string.Empty);
+
+            return country;
         }
     }
 }

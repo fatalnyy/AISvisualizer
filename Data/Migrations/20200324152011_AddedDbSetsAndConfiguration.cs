@@ -3,17 +3,15 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AISvisualizer.Migrations
 {
-    public partial class AddedDbSets : Migration
+    public partial class AddedDbSetsAndConfiguration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-
             migrationBuilder.CreateTable(
                 name: "MessagesType21",
                 columns: table => new
                 {
-                    MMSI = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MMSI = table.Column<long>(nullable: false),
                     MessageType = table.Column<string>(nullable: true),
                     Repeat = table.Column<short>(nullable: false),
                     AidType = table.Column<string>(nullable: true),
@@ -30,7 +28,8 @@ namespace AISvisualizer.Migrations
                     OffPosition = table.Column<string>(nullable: true),
                     RAIM = table.Column<string>(nullable: true),
                     VirtualAidFlag = table.Column<string>(nullable: true),
-                    Assigned = table.Column<string>(nullable: true)
+                    Assigned = table.Column<string>(nullable: true),
+                    Country = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -41,8 +40,7 @@ namespace AISvisualizer.Migrations
                 name: "MessagesType4",
                 columns: table => new
                 {
-                    MMSI = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MMSI = table.Column<long>(nullable: false),
                     MessageType = table.Column<string>(nullable: true),
                     Repeat = table.Column<short>(nullable: false),
                     Date = table.Column<DateTime>(nullable: true),
@@ -50,7 +48,8 @@ namespace AISvisualizer.Migrations
                     Longitude = table.Column<double>(nullable: false),
                     Latitude = table.Column<double>(nullable: false),
                     EPFD = table.Column<string>(nullable: true),
-                    RAIM = table.Column<string>(nullable: true)
+                    RAIM = table.Column<string>(nullable: true),
+                    Country = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -61,8 +60,7 @@ namespace AISvisualizer.Migrations
                 name: "MessagesType5",
                 columns: table => new
                 {
-                    MMSI = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MMSI = table.Column<long>(nullable: false),
                     MessageType = table.Column<string>(nullable: true),
                     Repeat = table.Column<short>(nullable: false),
                     AISversion = table.Column<string>(nullable: true),
@@ -81,7 +79,8 @@ namespace AISvisualizer.Migrations
                     Minute = table.Column<short>(nullable: true),
                     Draught = table.Column<double>(nullable: false),
                     Destination = table.Column<string>(nullable: true),
-                    DTE = table.Column<string>(nullable: true)
+                    DTE = table.Column<string>(nullable: true),
+                    Country = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -92,8 +91,7 @@ namespace AISvisualizer.Migrations
                 name: "MessagesType9",
                 columns: table => new
                 {
-                    MMSI = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MMSI = table.Column<long>(nullable: false),
                     MessageType = table.Column<string>(nullable: true),
                     Repeat = table.Column<short>(nullable: false),
                     Altitude = table.Column<string>(nullable: true),
@@ -105,7 +103,8 @@ namespace AISvisualizer.Migrations
                     Timestamp = table.Column<string>(nullable: true),
                     DTE = table.Column<string>(nullable: true),
                     Assigned = table.Column<string>(nullable: true),
-                    RAIM = table.Column<string>(nullable: true)
+                    RAIM = table.Column<string>(nullable: true),
+                    Country = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -129,7 +128,8 @@ namespace AISvisualizer.Migrations
                     HDG = table.Column<short>(nullable: true),
                     Timestamp = table.Column<string>(nullable: true),
                     Maneuver = table.Column<string>(nullable: true),
-                    RAIM = table.Column<string>(nullable: true)
+                    RAIM = table.Column<string>(nullable: true),
+                    Country = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -159,32 +159,6 @@ namespace AISvisualizer.Migrations
 
             migrationBuilder.DropTable(
                 name: "MessagesType5");
-
-            migrationBuilder.CreateTable(
-                name: "Messages",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Accuracy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    COG = table.Column<double>(type: "float", nullable: true),
-                    HDG = table.Column<short>(type: "smallint", nullable: true),
-                    Latitude = table.Column<double>(type: "float", nullable: false),
-                    Longitude = table.Column<double>(type: "float", nullable: false),
-                    MMSI = table.Column<long>(type: "bigint", nullable: false),
-                    Maneuver = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MessageType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RAIM = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ROT = table.Column<short>(type: "smallint", nullable: true),
-                    Repeat = table.Column<short>(type: "smallint", nullable: false),
-                    SOG = table.Column<double>(type: "float", nullable: true),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Timestamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Messages", x => x.Id);
-                });
         }
     }
 }

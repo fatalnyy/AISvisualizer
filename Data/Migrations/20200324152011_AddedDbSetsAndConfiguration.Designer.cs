@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AISvisualizer.Migrations
 {
     [DbContext(typeof(AISDbContext))]
-    [Migration("20200323172048_AddedDbSets")]
-    partial class AddedDbSets
+    [Migration("20200324152011_AddedDbSetsAndConfiguration")]
+    partial class AddedDbSetsAndConfiguration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,6 +31,9 @@ namespace AISvisualizer.Migrations
 
                     b.Property<double?>("COG")
                         .HasColumnType("float");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<short?>("HDG")
                         .HasColumnType("smallint");
@@ -73,9 +76,7 @@ namespace AISvisualizer.Migrations
             modelBuilder.Entity("AISvisualizer.Models.MessageType21", b =>
                 {
                     b.Property<long>("MMSI")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Accuracy")
                         .HasColumnType("nvarchar(max)");
@@ -84,6 +85,9 @@ namespace AISvisualizer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Assigned")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DimensionToBow")
@@ -136,9 +140,10 @@ namespace AISvisualizer.Migrations
             modelBuilder.Entity("AISvisualizer.Models.MessageType4", b =>
                 {
                     b.Property<long>("MMSI")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("Date")
                         .HasColumnType("datetime2");
@@ -172,14 +177,15 @@ namespace AISvisualizer.Migrations
             modelBuilder.Entity("AISvisualizer.Models.MessageType5", b =>
                 {
                     b.Property<long>("MMSI")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("bigint");
 
                     b.Property<string>("AISversion")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CallSign")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DTE")
@@ -241,9 +247,7 @@ namespace AISvisualizer.Migrations
             modelBuilder.Entity("AISvisualizer.Models.MessageType9", b =>
                 {
                     b.Property<long>("MMSI")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Accuracy")
                         .HasColumnType("nvarchar(max)");
@@ -256,6 +260,9 @@ namespace AISvisualizer.Migrations
 
                     b.Property<double?>("COG")
                         .HasColumnType("float");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DTE")
                         .HasColumnType("nvarchar(max)");
