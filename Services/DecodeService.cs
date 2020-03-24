@@ -95,7 +95,8 @@ namespace AISvisualizer.Services
                 HDG = GetTrueHeading(),
                 Timestamp = GetTimestamp(137, 6),
                 Maneuver = GetManeuverIndicator(),
-                RAIM = GetRAIMFlag(148, 1)
+                RAIM = GetRAIMFlag(148, 1),
+                Country = GetCountry()
             };
         }
 
@@ -111,7 +112,8 @@ namespace AISvisualizer.Services
                 Longitude = GetLongitude(79, 28),
                 Latitude = GetLatitude(107, 27),
                 EPFD = GetEPFD(134, 4),
-                RAIM = GetRAIMFlag(148, 1)
+                RAIM = GetRAIMFlag(148, 1),
+                Country = GetCountry()
             };
         }
 
@@ -138,7 +140,8 @@ namespace AISvisualizer.Services
                 Minute = GetPartOfDate(288, 6, false, false, false, true),
                 Draught = GetDraught(294, 8),
                 Destination = GetString(302, 120),
-                DTE = GetDTE(422, 1)
+                DTE = GetDTE(422, 1),
+                Country = GetCountry()
             };
         }
 
@@ -158,7 +161,8 @@ namespace AISvisualizer.Services
                 Timestamp = GetTimestamp(128, 6),
                 DTE = GetDTE(142, 1),
                 Assigned = GetAssinged(146, 1),
-                RAIM = GetRAIMFlag(147, 1)
+                RAIM = GetRAIMFlag(147, 1),
+                Country = GetCountry()
             };
         }
 
@@ -183,7 +187,8 @@ namespace AISvisualizer.Services
                 OffPosition = GetOffPositionIndicator(),
                 RAIM = GetRAIMFlag(268, 1),
                 VirtualAidFlag = GetVirtualAidFlag(),
-                Assigned = GetAssinged(270, 1)
+                Assigned = GetAssinged(270, 1),
+                Country = GetCountry()
             };
         }
 
@@ -556,6 +561,45 @@ namespace AISvisualizer.Services
 
             if (aidFlag == 0) return "Real AtoN";
             else return "Virtual AtoN";
+        }
+
+        public string GetCountry()
+        {
+            var mmsi = GetMMSI().ToString();
+            var firstDigit = Convert.ToInt32(mmsi[0]);
+
+            if (firstDigit == 8) return Enum.ToObject(typeof(Enums.Enums.MIDcountries), mmsi.Substring(1, 3)).ToString();
+            else if (firstDigit >= 2 && firstDigit <= 7) return Enum.ToObject(typeof(Enums.Enums.MIDcountries), mmsi.Substring(0, 3)).ToString();
+            else if (firstDigit == 0)
+            {
+                var secondDigit = Convert.ToInt32(mmsi[1]);
+
+                if (secondDigit == 0) return Enum.ToObject(typeof(Enums.Enums.MIDcountries), mmsi.Substring(2, 3)).ToString();
+                else return Enum.ToObject(typeof(Enums.Enums.MIDcountries), mmsi.Substring(1, 3)).ToString();
+            }
+            else if (firstDigit == 1)
+            {
+                var secondDigit = Convert.ToInt32(mmsi[1]);
+                var thirdDigit = Convert.ToInt32(mmsi[2]);
+
+                if (secondDigit == 1 && thirdDigit == 1) return Enum.ToObject(typeof(Enums.Enums.MIDcountries), mmsi.Substring(4, 3)).ToString();
+                else return null;
+            }
+            else if (firstDigit == 9)
+            {
+                var secondDigit = Convert.ToInt32(mmsi[1]);
+
+                if (secondDigit == 9 || secondDigit == 8) return Enum.ToObject(typeof(Enums.Enums.MIDcountries), mmsi.Substring(2, 3)).ToString();
+                else if (secondDigit == 7)
+                {
+                    var thirdDigit = Convert.ToInt32(mmsi[2]);
+
+                    if (thirdDigit == 0) return Enum.ToObject(typeof(Enums.Enums.MIDcountries), mmsi.Substring(3, 3)).ToString();
+                    else return null;
+                }
+                else return null;
+            }
+            else return null;
         }
     }
 }

@@ -22,5 +22,6 @@ namespace AISvisualizer.Models
         public string DTE { get; set; }
         public string Assigned { get; set; }
         public string RAIM { get; set; }
+        public string Country { get; set; }
     }
 }

@@ -46,6 +46,7 @@ namespace AISvisualizer.Services
         string GetAidType();
         string GetOffPositionIndicator();
         string GetVirtualAidFlag();
+        string GetCountry();
 
     }
 }

@@ -44,6 +44,7 @@ namespace AISvisualizer.Models
         public string Timestamp { get; set; }
         public string Maneuver { get; set; }
         public string RAIM { get; set; }
+        public string Country { get; set; }
 
         [ForeignKey("MMSI")]
         public virtual MessageType5 MessageType5 { get; set; }

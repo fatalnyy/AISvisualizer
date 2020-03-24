@@ -30,5 +30,6 @@ namespace AISvisualizer.Models
         public double Draught { get; set; }
         public string Destination { get; set; }
         public string DTE { get; set; }
+        public string Country { get; set; }
     }
 }

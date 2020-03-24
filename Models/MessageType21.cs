@@ -27,5 +27,6 @@ namespace AISvisualizer.Models
         public string RAIM { get; set; }
         public string VirtualAidFlag { get; set; }
         public string Assigned { get; set; }
+        public string Country { get; set; }
     }
 }

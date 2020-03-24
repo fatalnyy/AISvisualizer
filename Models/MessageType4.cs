@@ -18,5 +18,6 @@ namespace AISvisualizer.Models
         public double Latitude { get; set; }
         public string EPFD { get; set; }
         public string RAIM { get; set; }
+        public string Country { get; set; }
     }
 }

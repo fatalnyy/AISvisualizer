@@ -20,13 +20,13 @@ namespace AISvisualizer.Data
         {
 
         }
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            //modelBuilder.Entity<MessageType123>().Property(a => a.MMSI).ValueGeneratedNever();
-            //modelBuilder.Entity<MessageType4>().Property(a => a.MMSI).ValueGeneratedNever();
-            //modelBuilder.Entity<MessageType5>().Property(a => a.MMSI).ValueGeneratedNever();
-            //modelBuilder.Entity<MessageType9>().Property(a => a.MMSI).ValueGeneratedNever();
-            //modelBuilder.Entity<MessageType21>().Property(a => a.MMSI).ValueGeneratedNever();
-        }
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    //modelBuilder.Entity<MessageType123>().Property(a => a.MMSI).ValueGeneratedNever();
+        //    //modelBuilder.Entity<MessageType4>().Property(a => a.MMSI).ValueGeneratedNever();
+        //    //modelBuilder.Entity<MessageType5>().Property(a => a.MMSI).ValueGeneratedNever();
+        //    //modelBuilder.Entity<MessageType9>().Property(a => a.MMSI).ValueGeneratedNever();
+        //    //modelBuilder.Entity<MessageType21>().Property(a => a.MMSI).ValueGeneratedNever();
+        //}
     }
 }
