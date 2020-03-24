@@ -69,13 +69,16 @@ namespace AISvisualizer.Controllers
 
                     return Created("/api/AISMessages", decodedMessages);
                 }
-
+                int counter = 0;
                 var messagetype123s = decodedMessages.MessageType123s;
                 var messagetype5s = decodedMessages.MessageType5s;
 
-                foreach (var message in messagetype123s)
-                    message.MessageType5 = messagetype5s.Where(p => p.MMSI == message.MMSI).FirstOrDefault();
-
+                foreach (var message in decodedMessages.MessageType123s)
+                    message.MessageType5 = decodedMessages.MessageType5s.Where(p => p.MMSI == message.MMSI).FirstOrDefault();
+                foreach (var message in decodedMessages.MessageType123s)
+                {
+                    if (message.MessageType5 != null) counter++;
+                }
                 return Ok(decodedMessages);
             }
             catch (Exception ex)

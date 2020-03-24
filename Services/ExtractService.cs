@@ -22,7 +22,7 @@ namespace AISvisualizer.Services
             }
         }
 
-        public string GetBinaryPayload(string payload)
+        public string GetBinaryPayload(string payload, int numFillBits)
         {
             var binaryPayload = new StringBuilder();
             var processedASCIIpayload = GetProcessedASCII(payload);
@@ -33,16 +33,16 @@ namespace AISvisualizer.Services
                 binaryPayload.Append(x);
             }
 
-            //var remainder = (binaryPayload.Length + numFillBits) % 6;
-            //if (remainder != 0)
-            //{
-            //    numFillBits += 6 - remainder;
-            //}
+            var remainder = (binaryPayload.Length + numFillBits) % 6;
+            if (remainder != 0)
+            {
+                numFillBits += 6 - remainder;
+            }
 
-            //if (numFillBits > 0)
-            //{
-            //    binaryPayload.Append(new string('0', numFillBits));
-            //}
+            if (numFillBits > 0)
+            {
+                binaryPayload.Append(new string('0', numFillBits));
+            }
             return binaryPayload.ToString();
         }
 
@@ -50,7 +50,7 @@ namespace AISvisualizer.Services
         {
             if (startIndex > binaryPayload.Length) return "0";
 
-            return binaryPayload.Substring(startIndex, length);
+            return startIndex + length > binaryPayload.Length ? binaryPayload.Substring(startIndex) : binaryPayload.Substring(startIndex, length);
         }        
     }
 }

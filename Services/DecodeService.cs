@@ -10,11 +10,13 @@ namespace AISvisualizer.Services
 {
     public class DecodeService : IDecodeService
     {
+        int counter = 0;
         public string BinaryPayload { get; set; }
         public string FragmentOfPayload { get; set; }
         public string EncodedPayload { get; set; }
         public string Packet { get; set; }
         public string Channel { get; set; }
+        public Int64 MMSI { get; set; }
 
         private readonly IExtractService _extractService;
         public DecodeService(IExtractService extractService)
@@ -29,7 +31,7 @@ namespace AISvisualizer.Services
             await foreach (var lineContent in lineContents)
             {
                 var numSentences = Convert.ToInt32(lineContent.AISmessage.MessageCount);
-                //var numFillBits = Convert.ToInt32(lineContent.AISmessage.Size);
+                var numFillBits = Convert.ToInt32(lineContent.AISmessage.Size.Substring(0, 1));
                 var fragmentNumber = Convert.ToInt32(lineContent.AISmessage.MessageNumber);
 
                 if (numSentences > 1 && fragmentNumber == 1)
@@ -43,10 +45,18 @@ namespace AISvisualizer.Services
                 else
                     EncodedPayload = lineContent.AISmessage.Payload;
 
-                BinaryPayload = _extractService.GetBinaryPayload(EncodedPayload);
+                BinaryPayload = _extractService.GetBinaryPayload(EncodedPayload, numFillBits);
+                if (string.IsNullOrWhiteSpace(BinaryPayload)) continue;
+
                 Packet = lineContent.AISmessage.Format;
                 Channel = lineContent.AISmessage.Channel;
+                MMSI = GetMMSI();
 
+                if (MMSI <= 99999999)
+                {
+                    counter++;
+                    continue;
+                }
                 var messageType = GetMessageType();
 
                 if (messageType > 0)
@@ -91,7 +101,7 @@ namespace AISvisualizer.Services
             {
                 MessageType = Enums.Enums.GetEnumDescription<Enums.Enums.MessageTypes>(messageType),
                 Repeat = GetRepeatIndicator(),
-                MMSI = GetMMSI(),
+                MMSI = MMSI,
                 Packet = Packet,
                 Channel = Channel,
                 Status = GetNavigationStatus(),
@@ -115,7 +125,7 @@ namespace AISvisualizer.Services
             {
                 MessageType = Enums.Enums.GetEnumDescription<Enums.Enums.MessageTypes>(messageType),
                 Repeat = GetRepeatIndicator(),
-                MMSI = GetMMSI(),
+                MMSI = MMSI,
                 Packet = Packet,
                 Channel = Channel,
                 Date = GetDateOfMessageType4(),
@@ -134,7 +144,7 @@ namespace AISvisualizer.Services
             {
                 MessageType = Enums.Enums.GetEnumDescription<Enums.Enums.MessageTypes>(messageType),
                 Repeat = GetRepeatIndicator(),
-                MMSI = GetMMSI(),
+                MMSI = MMSI,
                 Packet = Packet,
                 Channel = Channel,
                 AISversion = GetAISversion(),
@@ -164,7 +174,7 @@ namespace AISvisualizer.Services
             {
                 MessageType = Enums.Enums.GetEnumDescription<Enums.Enums.MessageTypes>(messageType),
                 Repeat = GetRepeatIndicator(),
-                MMSI = GetMMSI(),
+                MMSI = MMSI,
                 Packet = Packet,
                 Channel = Channel,
                 Altitude = GetAltitude(38, 12),
@@ -187,7 +197,7 @@ namespace AISvisualizer.Services
             {
                 MessageType = Enums.Enums.GetEnumDescription<Enums.Enums.MessageTypes>(messageType),
                 Repeat = GetRepeatIndicator(),
-                MMSI = GetMMSI(),
+                MMSI = MMSI,
                 Packet = Packet,
                 Channel = Channel,
                 AidType = GetAidType(),
