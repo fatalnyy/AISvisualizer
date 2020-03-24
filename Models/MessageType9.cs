@@ -12,6 +12,8 @@ namespace AISvisualizer.Models
         public Int16 Repeat { get; set; }
         [Key]
         public Int64 MMSI { get; set; }
+        public string Packet { get; set; }
+        public string Channel { get; set; }
         public string Altitude { get; set; }
         public double? SOG { get; set; }
         public string Accuracy { get; set; }

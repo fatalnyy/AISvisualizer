@@ -44,12 +44,13 @@ namespace AISvisualizer.Controllers
 
         [HttpPost, DisableRequestSizeLimit]
         [Route("DecodeFromFiles")]
-        public async Task<IActionResult> DecodeFromFiles()
+        public async Task<IActionResult> DecodeFromFiles([FromForm(Name = "files")] IEnumerable<IFormFile> files)
         {
             try
             {
-                var files = Request.Form.Files.ToList();
-                var saveToDb = Convert.ToBoolean(Request.Form.Keys.FirstOrDefault());
+                var files1 = Request.Form.Files;
+                //var saveToDb = Convert.ToBoolean(Request.Form.Keys.FirstOrDefault());
+                var saveToDb = false;
                 var lineContents = _fileService.GetLineContents(files);
 
                 var decodedMessages = await _decodeService.GetDecodedMessage(lineContents);
@@ -68,6 +69,13 @@ namespace AISvisualizer.Controllers
 
                     return Created("/api/AISMessages", decodedMessages);
                 }
+
+                var messagetype123s = decodedMessages.MessageType123s;
+                var messagetype5s = decodedMessages.MessageType5s;
+
+                foreach (var message in messagetype123s)
+                    message.MessageType5 = messagetype5s.Where(p => p.MMSI == message.MMSI).FirstOrDefault();
+
                 return Ok(decodedMessages);
             }
             catch (Exception ex)
@@ -76,5 +84,10 @@ namespace AISvisualizer.Controllers
                 return BadRequest("Failed to decode AIS messages");
             }
         }
+    }
+    public class MyFileUploadClass
+    {
+        public IFormFile[] files { get; set; }
+        // other properties
     }
 }

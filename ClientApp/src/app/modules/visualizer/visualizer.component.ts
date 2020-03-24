@@ -22,15 +22,16 @@ export class VisualizerComponent implements OnInit {
     let num: number = 7;
     let result: number = num + 10;
   }
-  upload(files) {
+  public uploadFiles = (files) => {
     if (files.length === 0)
       return;
-    let saveToDb: string = String(true);
+
+    let saveToDb: string = String(false);
     const formData = new FormData();
     formData.append(saveToDb, "saveToDb");
 
     for (let file of files)
-      formData.append(file.name, file);
+      formData.append("files", file);
 
     this.decodeService.decodeFromFiles(formData).subscribe(response => {
       this.messages = response;

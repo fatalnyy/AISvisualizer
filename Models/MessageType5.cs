@@ -13,6 +13,8 @@ namespace AISvisualizer.Models
         public Int16 Repeat { get; set; }
         [Key]
         public Int64 MMSI { get; set; }
+        public string Packet { get; set; }
+        public string Channel { get; set; }
         public string AISversion { get; set; }
         public Int64 IMOnumber { get; set; }
         public string CallSign { get; set; }

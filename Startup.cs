@@ -2,6 +2,7 @@ using AISvisualizer.Data;
 using AISvisualizer.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +37,13 @@ namespace AISvisualizer
                 cfg.UseSqlServer(_config.GetConnectionString("AisConnectionString"));
             });
 
+            services.Configure<FormOptions>(o =>
+            {
+                o.ValueLengthLimit = int.MaxValue;
+                o.MultipartBodyLengthLimit = int.MaxValue;
+                o.MemoryBufferThreshold = int.MaxValue;
+            });
+
             services.AddScoped<IAISRepository, AISRepository>();
             services.AddTransient<IFileService, FileService>();
             services.AddTransient<IExtractService, ExtractService>();
@@ -58,6 +66,7 @@ namespace AISvisualizer
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
             if (!env.IsDevelopment())
             {
                 app.UseSpaStaticFiles();

@@ -13,6 +13,9 @@ namespace AISvisualizer.Services
         public string BinaryPayload { get; set; }
         public string FragmentOfPayload { get; set; }
         public string EncodedPayload { get; set; }
+        public string Packet { get; set; }
+        public string Channel { get; set; }
+
         private readonly IExtractService _extractService;
         public DecodeService(IExtractService extractService)
         {
@@ -41,6 +44,9 @@ namespace AISvisualizer.Services
                     EncodedPayload = lineContent.AISmessage.Payload;
 
                 BinaryPayload = _extractService.GetBinaryPayload(EncodedPayload);
+                Packet = lineContent.AISmessage.Format;
+                Channel = lineContent.AISmessage.Channel;
+
                 var messageType = GetMessageType();
 
                 if (messageType > 0)
@@ -86,6 +92,8 @@ namespace AISvisualizer.Services
                 MessageType = Enums.Enums.GetEnumDescription<Enums.Enums.MessageTypes>(messageType),
                 Repeat = GetRepeatIndicator(),
                 MMSI = GetMMSI(),
+                Packet = Packet,
+                Channel = Channel,
                 Status = GetNavigationStatus(),
                 ROT = GetRateOfTurn(),
                 SOG = GetSpeedOverGround(50, 10),
@@ -108,6 +116,8 @@ namespace AISvisualizer.Services
                 MessageType = Enums.Enums.GetEnumDescription<Enums.Enums.MessageTypes>(messageType),
                 Repeat = GetRepeatIndicator(),
                 MMSI = GetMMSI(),
+                Packet = Packet,
+                Channel = Channel,
                 Date = GetDateOfMessageType4(),
                 FixQuality = GetPositionAccuracy(78, 1),
                 Longitude = GetLongitude(79, 28),
@@ -125,6 +135,8 @@ namespace AISvisualizer.Services
                 MessageType = Enums.Enums.GetEnumDescription<Enums.Enums.MessageTypes>(messageType),
                 Repeat = GetRepeatIndicator(),
                 MMSI = GetMMSI(),
+                Packet = Packet,
+                Channel = Channel,
                 AISversion = GetAISversion(),
                 IMOnumber = GetIMOnumber(),
                 CallSign = GetString(70, 42),
@@ -153,6 +165,8 @@ namespace AISvisualizer.Services
                 MessageType = Enums.Enums.GetEnumDescription<Enums.Enums.MessageTypes>(messageType),
                 Repeat = GetRepeatIndicator(),
                 MMSI = GetMMSI(),
+                Packet = Packet,
+                Channel = Channel,
                 Altitude = GetAltitude(38, 12),
                 SOG = GetSpeedOverGround(50, 10),
                 Accuracy = GetPositionAccuracy(60, 1),
@@ -174,6 +188,8 @@ namespace AISvisualizer.Services
                 MessageType = Enums.Enums.GetEnumDescription<Enums.Enums.MessageTypes>(messageType),
                 Repeat = GetRepeatIndicator(),
                 MMSI = GetMMSI(),
+                Packet = Packet,
+                Channel = Channel,
                 AidType = GetAidType(),
                 Name = GetString(43, 120),
                 Accuracy = GetPositionAccuracy(163, 1),
@@ -284,7 +300,8 @@ namespace AISvisualizer.Services
 
             double longitude = ((double)convertedLongitude / 600000.0);
 
-            if (longitude < -180.0 || longitude > 180.0) throw new InvalidOperationException("Invalid longitude");
+            // if (longitude < -180.0 || longitude > 180.0) throw new InvalidOperationException("Invalid longitude");
+
             return Math.Round(longitude, 6);
         }
 
@@ -298,7 +315,7 @@ namespace AISvisualizer.Services
 
             double latitude = ((double)convertedLatitude / 600000.0);
 
-            if (latitude < -90.0 || latitude > 90.0) throw new InvalidOperationException("Invalid latitude");
+            //if (latitude < -90.0 || latitude > 90.0) throw new InvalidOperationException("Invalid latitude");
             return Math.Round(latitude, 6);
         }
 
