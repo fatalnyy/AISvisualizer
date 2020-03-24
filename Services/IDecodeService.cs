@@ -11,8 +11,9 @@ namespace AISvisualizer.Services
         string BinaryPayload { get; set; }
         string FragmentOfPayload { get; set; }
         string EncodedPayload { get; set; }
-         string Packet { get; set; }
-         string Channel { get; set; }
+        string Packet { get; set; }
+        string Channel { get; set; }
+        Int64 MMSI { get; set; }
         Task<DecodedMessages> GetDecodedMessage(IAsyncEnumerable<LineContent> lineContents);
         public MessageType123 GetMessageType123(Int16 messageType);
         MessageType4 GetMessageType4(Int16 messageType);
