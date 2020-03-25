@@ -20,10 +20,10 @@ namespace AISvisualizer.Models
         public string CallSign { get; set; }
         public string VesselName { get; set; }
         public string ShipType { get; set; }
-        public string DimensionToBow { get; set; }
-        public string DimensionToStern { get; set; }
-        public string DimensionToPort { get; set; }
-        public string DimensionToStarboard { get; set; }
+        public Int16 DimensionToBow { get; set; }
+        public Int16 DimensionToStern { get; set; }
+        public Int16 DimensionToPort { get; set; }
+        public Int16 DimensionToStarboard { get; set; }
         public string EPFD { get; set; }
         public Int16? Month { get; set; }
         public Int16? Day { get; set; }

@@ -36,14 +36,14 @@ namespace AISvisualizer.Models
         public string Packet { get; set; }
         public string Channel { get; set; }
         public string Status { get; set; }
-        public Int16? ROT { get; set; }
+        public double? ROT { get; set; }
         public double? SOG { get; set; }
         public string Accuracy { get; set; }
         public double Longitude { get; set; }
         public double Latitude { get; set; }
         public double? COG { get; set; }
         public Int16? HDG { get; set; }
-        public string Timestamp { get; set; }
+        public Int16 Timestamp { get; set; }
         public string Maneuver { get; set; }
         public string RAIM { get; set; }
         public string Country { get; set; }

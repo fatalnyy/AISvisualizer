@@ -82,7 +82,7 @@ namespace AISvisualizer.Controllers
                 return Ok(decodedMessages);
             }
             catch (Exception ex)
-            {
+            { 
                 _logger.LogError($"Failed to decode AIS messages: {ex}");
                 return BadRequest("Failed to decode AIS messages");
             }

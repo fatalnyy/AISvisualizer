@@ -26,7 +26,7 @@ export class VisualizerComponent implements OnInit {
     if (files.length === 0)
       return;
 
-    let saveToDb: string = String(false);
+    let saveToDb: string = String(true);
     const formData = new FormData();
     formData.append(saveToDb, "saveToDb");
 

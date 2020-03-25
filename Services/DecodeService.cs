@@ -48,9 +48,9 @@ namespace AISvisualizer.Services
                 BinaryPayload = _extractService.GetBinaryPayload(EncodedPayload, numFillBits);
                 if (string.IsNullOrWhiteSpace(BinaryPayload)) continue;
 
-                Packet = lineContent.AISmessage.Format;
+                Packet = lineContent.AISmessage.Format.Substring(1);
                 Channel = lineContent.AISmessage.Channel;
-                MMSI = GetMMSI();
+                MMSI = GetInt64(8, 30);
 
                 if (MMSI <= 99999999)
                 {
@@ -100,7 +100,7 @@ namespace AISvisualizer.Services
             return new MessageType123
             {
                 MessageType = Enums.Enums.GetEnumDescription<Enums.Enums.MessageTypes>(messageType),
-                Repeat = GetRepeatIndicator(),
+                Repeat = GetInt16(6, 2),
                 MMSI = MMSI,
                 Packet = Packet,
                 Channel = Channel,
@@ -112,7 +112,7 @@ namespace AISvisualizer.Services
                 Latitude = GetLatitude(89, 27),
                 COG = GetCourseOverGround(116, 12),
                 HDG = GetTrueHeading(),
-                Timestamp = GetTimestamp(137, 6),
+                Timestamp = GetInt16(137, 6),
                 Maneuver = GetManeuverIndicator(),
                 RAIM = GetRAIMFlag(148, 1),
                 Country = GetCountry()
@@ -124,7 +124,7 @@ namespace AISvisualizer.Services
             return new MessageType4
             {
                 MessageType = Enums.Enums.GetEnumDescription<Enums.Enums.MessageTypes>(messageType),
-                Repeat = GetRepeatIndicator(),
+                Repeat = GetInt16(6, 2),
                 MMSI = MMSI,
                 Packet = Packet,
                 Channel = Channel,
@@ -143,19 +143,19 @@ namespace AISvisualizer.Services
             return new MessageType5
             {
                 MessageType = Enums.Enums.GetEnumDescription<Enums.Enums.MessageTypes>(messageType),
-                Repeat = GetRepeatIndicator(),
+                Repeat = GetInt16(6, 2),
                 MMSI = MMSI,
                 Packet = Packet,
                 Channel = Channel,
                 AISversion = GetAISversion(),
-                IMOnumber = GetIMOnumber(),
+                IMOnumber = GetInt64(40, 30),
                 CallSign = GetString(70, 42),
                 VesselName = GetString(112, 120),
                 ShipType = GetShipType(),
-                DimensionToBow = GetDimensionToBowOrToStern(240, 9),
-                DimensionToStern = GetDimensionToBowOrToStern(249, 9),
-                DimensionToPort = GetDimensionToPortOrToStarboard(258, 6),
-                DimensionToStarboard = GetDimensionToPortOrToStarboard(264, 6),
+                DimensionToBow = GetInt16(240, 9),
+                DimensionToStern = GetInt16(249, 9),
+                DimensionToPort = GetInt16(258, 6),
+                DimensionToStarboard = GetInt16(264, 6),
                 EPFD = GetEPFD(270, 4),
                 Month = GetPartOfDate(274, 4, true),
                 Day = GetPartOfDate(278, 5, false, true),
@@ -173,7 +173,7 @@ namespace AISvisualizer.Services
             return new MessageType9
             {
                 MessageType = Enums.Enums.GetEnumDescription<Enums.Enums.MessageTypes>(messageType),
-                Repeat = GetRepeatIndicator(),
+                Repeat = GetInt16(6, 2),
                 MMSI = MMSI,
                 Packet = Packet,
                 Channel = Channel,
@@ -183,7 +183,7 @@ namespace AISvisualizer.Services
                 Longitude = GetLongitude(61, 28),
                 Latitude = GetLatitude(89, 27),
                 COG = GetCourseOverGround(116, 12),
-                Timestamp = GetTimestamp(128, 6),
+                Timestamp = GetInt16(128, 6),
                 DTE = GetDTE(142, 1),
                 Assigned = GetAssinged(146, 1),
                 RAIM = GetRAIMFlag(147, 1),
@@ -196,7 +196,7 @@ namespace AISvisualizer.Services
             return new MessageType21
             {
                 MessageType = Enums.Enums.GetEnumDescription<Enums.Enums.MessageTypes>(messageType),
-                Repeat = GetRepeatIndicator(),
+                Repeat = GetInt16(6, 2),
                 MMSI = MMSI,
                 Packet = Packet,
                 Channel = Channel,
@@ -205,12 +205,12 @@ namespace AISvisualizer.Services
                 Accuracy = GetPositionAccuracy(163, 1),
                 Longitude = GetLongitude(164, 28),
                 Latitude = GetLatitude(192, 27),
-                DimensionToBow = GetDimensionToBowOrToStern(219, 9),
-                DimensionToStern = GetDimensionToBowOrToStern(228, 9),
-                DimensionToPort = GetDimensionToPortOrToStarboard(237, 6),
-                DimensionToStarboard = GetDimensionToPortOrToStarboard(243, 6),
+                DimensionToBow = GetInt16(219, 9),
+                DimensionToStern = GetInt16(228, 9),
+                DimensionToPort = GetInt16(237, 6),
+                DimensionToStarboard = GetInt16(243, 6),
                 EPFD = GetEPFD(249, 4),
-                Second = GetTimestamp(253, 6),
+                Second = GetInt16(253, 6),
                 OffPosition = GetOffPositionIndicator(),
                 RAIM = GetRAIMFlag(268, 1),
                 VirtualAidFlag = GetVirtualAidFlag(),
@@ -218,43 +218,39 @@ namespace AISvisualizer.Services
                 Country = GetCountry()
             };
         }
+        public Int16 GetInt16(int startIndex, int length)
+        {
+            var binValue = _extractService.ExtractBinaryFieldValue(BinaryPayload, startIndex, length);
+            var value = Convert.ToInt16(binValue, 2);
+
+            return value;
+        }
+
+        public Int64 GetInt64(int startIndex, int length)
+        {
+            var binValue = _extractService.ExtractBinaryFieldValue(BinaryPayload, startIndex, length);
+            var value = Convert.ToInt64(binValue, 2);
+
+            return value;
+        }
 
         public Int16 GetMessageType()
         {
-            var binMessageType = _extractService.ExtractBinaryFieldValue(BinaryPayload, 0, 6);
-            var messageType = Convert.ToInt16(binMessageType, 2);
-
+            var messageType = GetInt16(0, 6);
             if (messageType == 0 || messageType > 27) return -1;
 
             return messageType;
         }
 
-        public Int16 GetRepeatIndicator()
-        {
-            var binRepeatIndicator = _extractService.ExtractBinaryFieldValue(BinaryPayload, 6, 2);
-            var repeatIndicator = Convert.ToInt16(binRepeatIndicator, 2);
-
-            return repeatIndicator;
-        }
-
-        public Int64 GetMMSI()
-        {
-            var binMMSI = _extractService.ExtractBinaryFieldValue(BinaryPayload, 8, 30);
-            var MMSI = Convert.ToInt64(binMMSI, 2);
-
-            return MMSI;
-        }
-
         public string GetNavigationStatus()
         {
-            var binNavigationStatus = _extractService.ExtractBinaryFieldValue(BinaryPayload, 38, 4);
-            var navigationStatus = Convert.ToInt16(binNavigationStatus, 2);
+            var navigationStatus = GetInt16(38, 4);
 
             if (navigationStatus > 15) return ("Invalid navigation status!");
             return Enums.Enums.GetEnumDescription<Enums.Enums.NavigationStatus>(navigationStatus);
         }
 
-        public Int16? GetRateOfTurn()
+        public double? GetRateOfTurn()
         {
             var binROT = _extractService.ExtractBinaryFieldValue(BinaryPayload, 42, 8);
             bool negative = false;
@@ -275,14 +271,12 @@ namespace AISvisualizer.Services
             ROT_sensor = Math.Round(ROT_sensor);
             ROT_sensor = negative ? -ROT_sensor : ROT_sensor;
 
-            return (Int16)ROT_sensor;
+            return ROT_sensor;
         }
 
         public double? GetSpeedOverGround(int startIndex, int length)
         {
-            var binSOG = _extractService.ExtractBinaryFieldValue(BinaryPayload, startIndex, length);
-            var convertedSOG = Convert.ToInt16(binSOG, 2);
-
+            var convertedSOG = GetInt16(startIndex, length);
             if (convertedSOG == 1023) return null; // "Not available SOG";
 
             double SOG = (double)convertedSOG * 0.1;
@@ -292,8 +286,7 @@ namespace AISvisualizer.Services
 
         public string GetPositionAccuracy(int startIndex, int length)
         {
-            var binPositionAccuracy = _extractService.ExtractBinaryFieldValue(BinaryPayload, startIndex, length);
-            var positionAccuracy = Convert.ToInt16(binPositionAccuracy, 2);
+            var positionAccuracy = GetInt16(startIndex, length);
 
             if (positionAccuracy == 1) return "<10m";
             else if (positionAccuracy == 0) return ">10m";
@@ -331,22 +324,20 @@ namespace AISvisualizer.Services
 
         public double? GetCourseOverGround(int startIndex, int length)
         {
-            var binCOG = _extractService.ExtractBinaryFieldValue(BinaryPayload, startIndex, length);
-            var convertedCOG = Convert.ToInt16(binCOG, 2);
+            var convertedCOG = GetInt16(startIndex, length);
 
             if (convertedCOG == 3600) return null; // "Not available";
 
             double COG = (double)convertedCOG * 0.1;
 
-            if (COG > 360.0) throw new InvalidOperationException("Invalid COG > 360[deg]");
+            if (COG > 360.0) return null; // throw new InvalidOperationException("Invalid COG > 360[deg]");
 
             return Math.Round(COG, 1);
         }
 
         public Int16? GetTrueHeading()
         {
-            var binTrueHeading = _extractService.ExtractBinaryFieldValue(BinaryPayload, 128, 9);
-            var trueHeading = Convert.ToInt16(binTrueHeading, 2);
+            var trueHeading = GetInt16(128, 9);
              
             if (trueHeading == 511) return null; // "Not available";
             if (trueHeading > 359) return null; // "Error";
@@ -354,23 +345,22 @@ namespace AISvisualizer.Services
             return trueHeading;
         }
 
-        public string GetTimestamp(int startIndex, int length)
+        public Int16 GetTimestamp(int startIndex, int length)
         {
-            var binTimeStamp = _extractService.ExtractBinaryFieldValue(BinaryPayload, startIndex, length);
-            var timeStamp = Convert.ToInt16(binTimeStamp, 2);
+            var timeStamp = GetInt16(startIndex, length);
 
-            if (timeStamp == 60) return "Not available";
-            else if (timeStamp == 61) return "System in manual input mode";
-            else if (timeStamp == 62) return "System in estimated mode";
-            else if (timeStamp == 63) return "System inoperative";
+            //if (timeStamp == 60) return "Not available";
+            //else if (timeStamp == 61) return "System in manual input mode";
+            //else if (timeStamp == 62) return "System in estimated mode";
+            //else if (timeStamp == 63) return "System inoperative";
 
-            return string.Format("{0}", timeStamp.ToString());
+            //return string.Format("{0}", timeStamp.ToString());
+            return timeStamp;
         }
 
         public string GetManeuverIndicator()
         {
-            var binManeuverIndicator = _extractService.ExtractBinaryFieldValue(BinaryPayload, 143, 2);
-            var maneuverIndicator = Convert.ToInt16(binManeuverIndicator, 2);
+            var maneuverIndicator = GetInt16(143, 2);
 
             switch (maneuverIndicator)
             {
@@ -387,8 +377,7 @@ namespace AISvisualizer.Services
 
         public string GetRAIMFlag(int startIndex,int length)
         {
-            var binRAIMFlag = _extractService.ExtractBinaryFieldValue(BinaryPayload, startIndex, length);
-            var RAIMFlag = Convert.ToInt16(binRAIMFlag, 2);
+            var RAIMFlag = GetInt16(startIndex, length);
 
             if (RAIMFlag == 1) return "In use";
             else if (RAIMFlag == 0) return "Not in use";
@@ -403,36 +392,24 @@ namespace AISvisualizer.Services
 
         public DateTime? GetDateOfMessageType4()
         {
-            var binYear = _extractService.ExtractBinaryFieldValue(BinaryPayload, 38, 14);
-            var year = Convert.ToInt16(binYear, 2);
-
+            var year = GetInt16(38, 14);
             if (year == 0) return null;
 
-            var binMonth = _extractService.ExtractBinaryFieldValue(BinaryPayload, 52, 4);
-            var month = Convert.ToInt16(binMonth, 2);
-
+            var month = GetInt16(52, 4);
             if (month == 0) return null;
 
-            var binDay = _extractService.ExtractBinaryFieldValue(BinaryPayload, 56, 5);
-            var day = Convert.ToInt16(binDay, 2);
-
+            var day = GetInt16(56, 5);
             if (day == 0) return null;
 
             var date = new DateTime(year, month, day);
 
-            var binHour = _extractService.ExtractBinaryFieldValue(BinaryPayload, 61, 5);
-            var hour = Convert.ToInt16(binHour, 2);
-
+            var hour = GetInt16(61, 5);
             if (hour == 0) return date;
 
-            var binMinute = _extractService.ExtractBinaryFieldValue(BinaryPayload, 66, 6);
-            var minute = Convert.ToInt16(binMinute, 2);
-
+            var minute = GetInt16(66, 6);
             if (minute == 0) return date;
 
-            var binSecond = _extractService.ExtractBinaryFieldValue(BinaryPayload, 72, 6);
-            var second = Convert.ToInt16(binSecond, 2);
-
+            var second = GetInt16(72, 6);
             date = new DateTime(year, month, day, hour, minute, second);
 
             return date;
@@ -440,8 +417,7 @@ namespace AISvisualizer.Services
 
         public string GetEPFD(int startIndex, int length)
         {
-            var binEPFD = _extractService.ExtractBinaryFieldValue(BinaryPayload, startIndex, length);
-            var EPFD = Convert.ToInt16(binEPFD, 2);
+            var EPFD = GetInt16(startIndex, length);
 
             if (EPFD > 8) return ("Undefined");
             return Enums.Enums.GetEnumDescription<Enums.Enums.EPFDfixTypes>(EPFD);
@@ -449,20 +425,11 @@ namespace AISvisualizer.Services
 
         public string GetAISversion()
         {
-            var binVersion = _extractService.ExtractBinaryFieldValue(BinaryPayload, 38, 2);
-            var version = Convert.ToInt16(binVersion, 2);
+            var version = GetInt16(38, 2);
 
             if (version == 0) return "ITU1371";
             else if (version > 0 && version < 4) return "Future editions";
             else return "Error";
-        }
-
-        public Int64 GetIMOnumber()
-        {
-            var binIMOnumber = _extractService.ExtractBinaryFieldValue(BinaryPayload, 40, 30);
-            var IMOnumber = Convert.ToInt64(binIMOnumber, 2);
-
-            return IMOnumber;
         }
 
         public string GetString(int startIndex, int length)
@@ -486,35 +453,15 @@ namespace AISvisualizer.Services
 
         public string GetShipType()
         {
-            var binShipType = _extractService.ExtractBinaryFieldValue(BinaryPayload, 232, 8);
-            var shipType = Convert.ToInt16(binShipType, 2);
+            var shipType = GetInt16(232, 8);
 
             if (shipType > 99) return ("Invalid Ship Type!");
             return Enum.ToObject(typeof(Enums.Enums.ShipType), shipType).ToString();
         }
 
-        public string GetDimensionToBowOrToStern(int startIndex, int length)
-        {
-            var binDimension = _extractService.ExtractBinaryFieldValue(BinaryPayload, startIndex, length);
-            var dimension = Convert.ToInt16(binDimension, 2);
-
-            if (dimension == 511) return ">511";
-            return dimension.ToString();
-        }
-
-        public string GetDimensionToPortOrToStarboard(int startIndex, int length)
-        {
-            var binDimension = _extractService.ExtractBinaryFieldValue(BinaryPayload, startIndex, length);
-            var dimension = Convert.ToInt16(binDimension, 2);
-
-            if (dimension == 63) return ">63";
-            return dimension.ToString();
-        }
-
         public Int16? GetPartOfDate(int startIndex, int length, bool month = false, bool day = false, bool hour = false, bool minute = false)
         {
-            var binValue = _extractService.ExtractBinaryFieldValue(BinaryPayload, startIndex, length);
-            var value = Convert.ToInt16(binValue, 2);
+            var value = GetInt16(startIndex, length);
 
             if (month && value == 0) return null;
             if (day && value == 0) return null;
@@ -526,18 +473,15 @@ namespace AISvisualizer.Services
 
         public double GetDraught(int startIndex, int length)
         {
-            var binDraught = _extractService.ExtractBinaryFieldValue(BinaryPayload, startIndex, length);
-            var convertedDraught = Convert.ToInt16(binDraught, 2);
+            var convertedDraught = GetInt16(startIndex, length);
 
             double draught = (double)convertedDraught/ 10;
-
             return draught;
         }
 
         public string GetDTE(int startIndex, int length)
         {
-            var binDTE = _extractService.ExtractBinaryFieldValue(BinaryPayload, startIndex, length);
-            var DTE = Convert.ToInt16(binDTE, 2);
+            var DTE = GetInt16(startIndex, length);
 
             if (DTE == 0) return "Data terminal ready";
             else if (DTE == 1) return "Not ready";
@@ -546,8 +490,7 @@ namespace AISvisualizer.Services
 
         public string GetAltitude(int startIndex, int length)
         {
-            var binAlt = _extractService.ExtractBinaryFieldValue(BinaryPayload, startIndex, length);
-            var alt = Convert.ToInt16(binAlt, 2);
+            var alt = GetInt16(startIndex, length);
 
             if (alt == 4095) return "Not available";
             else if (alt == 4094) return ">= 4094";
@@ -556,8 +499,7 @@ namespace AISvisualizer.Services
 
         public string GetAssinged(int startIndex, int length)
         {
-            var binAssigned = _extractService.ExtractBinaryFieldValue(BinaryPayload, startIndex, length);
-            var assigned = Convert.ToInt16(binAssigned, 2);
+            var assigned = GetInt16(startIndex, length);
 
             if (assigned == 0) return "Autonomous mode";
             else return "Assigned mode";
@@ -565,18 +507,15 @@ namespace AISvisualizer.Services
 
         public string GetAidType()
         {
-            var binAid = _extractService.ExtractBinaryFieldValue(BinaryPayload, 38, 5);
-            var aid = Convert.ToInt16(binAid, 2);
+            var aid = GetInt16(38, 5);
 
             if (aid > 31) return ("Invalid Aid Type!");
             return Enums.Enums.GetEnumDescription<Enums.Enums.AidType>(aid);
-
         }
 
         public string GetOffPositionIndicator()
         {
-            var binOffPosition = _extractService.ExtractBinaryFieldValue(BinaryPayload, 259, 1);
-            var offPosition = Convert.ToInt16(binOffPosition, 2);
+            var offPosition = GetInt16(259, 1);
 
             if (offPosition == 0) return "On position";
             else return "Off position";
@@ -584,8 +523,7 @@ namespace AISvisualizer.Services
 
         public string GetVirtualAidFlag()
         {
-            var binAidFlag = _extractService.ExtractBinaryFieldValue(BinaryPayload, 269, 1);
-            var aidFlag = Convert.ToInt16(binAidFlag, 2);
+            var aidFlag = GetInt16(269, 1);
 
             if (aidFlag == 0) return "Real AtoN";
             else return "Virtual AtoN";
@@ -593,7 +531,7 @@ namespace AISvisualizer.Services
 
         public string GetCountry()
         {
-            var mmsi = GetMMSI().ToString();
+            var mmsi = MMSI.ToString();
             var firstDigit = Convert.ToInt32(mmsi.Substring(0, 1));
             var country = "";
             

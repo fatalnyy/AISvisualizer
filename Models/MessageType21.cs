@@ -20,12 +20,12 @@ namespace AISvisualizer.Models
         public string Accuracy { get; set; }
         public double Longitude { get; set; }
         public double Latitude { get; set; }
-        public string DimensionToBow { get; set; }
-        public string DimensionToStern { get; set; }
-        public string DimensionToPort { get; set; }
-        public string DimensionToStarboard { get; set; }
+        public Int16 DimensionToBow { get; set; }
+        public Int16 DimensionToStern { get; set; }
+        public Int16 DimensionToPort { get; set; }
+        public Int16 DimensionToStarboard { get; set; }
         public string EPFD { get; set; }
-        public string Second { get; set; }
+        public Int16 Second { get; set; }
         public string OffPosition { get; set; }
         public string RAIM { get; set; }
         public string VirtualAidFlag { get; set; }

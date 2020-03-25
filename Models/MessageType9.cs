@@ -20,7 +20,7 @@ namespace AISvisualizer.Models
         public double Longitude { get; set; }
         public double Latitude { get; set; }
         public double? COG { get; set; }
-        public string Timestamp { get; set; }
+        public Int16 Timestamp { get; set; }
         public string DTE { get; set; }
         public string Assigned { get; set; }
         public string RAIM { get; set; }
