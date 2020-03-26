@@ -48,36 +48,25 @@ namespace AISvisualizer.Controllers
         {
             try
             {
-                var files1 = Request.Form.Files;
                 //var saveToDb = Convert.ToBoolean(Request.Form.Keys.FirstOrDefault());
                 var saveToDb = true;
                 var lineContents = _fileService.GetLineContents(files);
 
                 var decodedMessages = await _messageService.GetDecodedMessage(lineContents);
-                //var decodedMessages = await _decodeService.GetDecodedMessage(lineContents);
-                //var messages = new List<Message>();
-                //await foreach (var lineContent in lineContents)
-                //{
-                //    var decodedMessage = _decodeService.GetDecodedMessage(lineContent.AISmessage.Payload);
 
-                //    if (decodedMessage != null) messages.Add(decodedMessage);
-                //}
-                //var witgoutdups = decodedMessages.MessageType123s.GroupBy(p => p.MMSI).Select(x => x.First()).ToList();
-                //var witgoutdups1 = decodedMessages.MessageType5s.GroupBy(p => p.MMSI).Select(x => x.First()).ToList();
-                //var witgoutdups2 = decodedMessages.MessageType21s.GroupBy(p => p.MMSI).Select(x => x.First()).ToList();
+                if (saveToDb)
+                {
+                    _repository.AddMessages(decodedMessages);
+                    _repository.SaveAll();
 
-                //if (saveToDb)
-                //{
-                //    _repository.AddMessages(witgoutdups1);
-                //    _repository.SaveAll();
-
-                //    return Created("/api/AISMessages", decodedMessages);
-                //}
-                //int counter = 0;
-                ////var messagetype123s = decodedMessages.MessageType123s;
+                    var x = _repository.GetAllMessages<MessageType1>();
+                    return Created("/api/AISMessages", decodedMessages);
+                }
+                int counter = 0;
+                //var messagetype123s = decodedMessages.MessageType123s;
                 //var messagetype5s = decodedMessages.MessageType5s;
 
-                //foreach (var message in decodedMessages.MessageType123s)
+                //foreach (var message in decodedMessages.MessagesType1)
                 //    message.MessageType5 = decodedMessages.MessageType5s.Where(p => p.MMSI == message.MMSI).FirstOrDefault();
                 //foreach (var message in decodedMessages.MessageType123s)
                 //{

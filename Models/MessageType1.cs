@@ -19,10 +19,6 @@ namespace AISvisualizer.Models
         public Int16 Spare { get; set; }
         public string RAIM { get; set; }
         public int RadioStatus { get; set; }
-        public int MessageType5_Id { get; set; }
-
-        [ForeignKey("MessageType5_Id")]
-        public virtual MessageType5 MessageType5 { get; set; }
 
         public MessageType1(short messageType, IDecodeService decodeService)
             : base(messageType, decodeService)

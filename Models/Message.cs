@@ -21,7 +21,7 @@ namespace AISvisualizer.Models
         protected Message() {}
         protected Message(Int16 messageType, IDecodeService decodeService)
         {
-            Date = Date;
+            Date = decodeService.Date;
             MessageType = Enums.Enums.GetEnumDescription<Enums.Enums.MessageTypes>(messageType);
             Repeat = decodeService.GetInt16(6, 2);
             MMSI = decodeService.MMSI;
