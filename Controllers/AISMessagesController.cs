@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AISvisualizer.Data;
 using AISvisualizer.Models;
 using AISvisualizer.Services;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -18,13 +19,17 @@ namespace AISvisualizer.Controllers
         private readonly ILogger<AISMessagesController> _logger;
         private readonly IFileService _fileService;
         private readonly IMessageService _messageService;
+        private readonly IMapper _mapper;
 
-        public AISMessagesController(IAISRepository repository, ILogger<AISMessagesController> logger, IFileService fileService, IMessageService messageService)
+        public AISMessagesController(IAISRepository repository, ILogger<AISMessagesController> logger, 
+                                        IFileService fileService, IMessageService messageService,
+                                        IMapper mapper)
         {
             _repository = repository;
             _logger = logger;
             _fileService = fileService;
             _messageService = messageService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -49,7 +54,7 @@ namespace AISvisualizer.Controllers
             try
             {
                 //var saveToDb = Convert.ToBoolean(Request.Form.Keys.FirstOrDefault());
-                var saveToDb = true;
+                var saveToDb = false;
                 var lineContents = _fileService.GetLineContents(files);
 
                 var decodedMessages = await _messageService.GetDecodedMessage(lineContents);
@@ -58,21 +63,19 @@ namespace AISvisualizer.Controllers
                 {
                     _repository.AddMessages(decodedMessages);
                     _repository.SaveAll();
-
-                    var x = _repository.GetAllMessages<MessageType1>();
-                    return Created("/api/AISMessages", decodedMessages);
                 }
-                int counter = 0;
-                //var messagetype123s = decodedMessages.MessageType123s;
-                //var messagetype5s = decodedMessages.MessageType5s;
 
-                //foreach (var message in decodedMessages.MessagesType1)
-                //    message.MessageType5 = decodedMessages.MessageType5s.Where(p => p.MMSI == message.MMSI).FirstOrDefault();
-                //foreach (var message in decodedMessages.MessageType123s)
-                //{
-                //    if (message.MessageType5 != null) counter++;
-                //}
-                return null;//return Ok(decodedMessages);
+                var decodedMessagesVM = _mapper.Map<DecodedMessages, DecodedMessagesViewModel>(decodedMessages);
+
+                foreach (var message in decodedMessagesVM.MessagesType1)
+                    message.MessageType5 = decodedMessages.MessagesType5.Where(p => p.MMSI == message.MMSI).FirstOrDefault();
+                foreach (var message in decodedMessagesVM.MessagesType2)
+                    message.MessageType5 = decodedMessages.MessagesType5.Where(p => p.MMSI == message.MMSI).FirstOrDefault();
+                foreach (var message in decodedMessagesVM.MessagesType3)
+                    message.MessageType5 = decodedMessages.MessagesType5.Where(p => p.MMSI == message.MMSI).FirstOrDefault();
+
+                if (saveToDb) return Created("api/messages-list", decodedMessagesVM);
+                else return Ok(decodedMessages);
             }
             catch (Exception ex)
             { 

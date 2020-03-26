@@ -14,4 +14,8 @@ namespace AISvisualizer.Models
         }
     }
 
+    public class MessageType2ViewModel : MessageType2
+    {
+        public MessageType5 MessageType5 { get; set; }
+    }
 }

@@ -25,7 +25,7 @@ namespace AISvisualizer.Data
             }
             catch (Exception ex)
             {
-                _logger.LogInformation($"Failed to get all messages of type 21: {ex}");
+                _logger.LogInformation($"Failed to get all messages {ex}");
                 return null;
             }
         }

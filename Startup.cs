@@ -1,5 +1,6 @@
 using AISvisualizer.Data;
 using AISvisualizer.Services;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Features;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Reflection;
 
 namespace AISvisualizer
 {
@@ -49,6 +51,8 @@ namespace AISvisualizer
             services.AddTransient<IExtractService, ExtractService>();
             services.AddTransient<IDecodeService, DecodeService>();
             services.AddTransient<IMessageService, MessageService>();
+
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
