@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Message } from '../../Shared/Models/message.interface';
 import { DecodeService } from '../../Shared/Services/decode.service';
 import { ToastrService } from 'ngx-toastr';
+import { DecodedMessages } from '../../Shared/Models/decodedMessages.interface';
 
 @Component({
   selector: 'app-visualizer',
@@ -10,7 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class VisualizerComponent implements OnInit {
 
-  messages: Message[];
+  decodedMessages: DecodedMessages;
 
   constructor(private readonly decodeService: DecodeService, private readonly toastr: ToastrService) { }
 
@@ -34,7 +34,7 @@ export class VisualizerComponent implements OnInit {
       formData.append("files", file);
 
     this.decodeService.decodeFromFiles(formData).subscribe(response => {
-      this.messages = response;
+      this.decodedMessages = response;
     }, error => {
         this.toastr.error(error, 'Problem!');
     });

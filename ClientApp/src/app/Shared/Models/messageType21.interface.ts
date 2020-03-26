@@ -1,0 +1,28 @@
+
+export interface MessageType21 {
+  id: number,
+  date?: Date,
+  messageType: string,
+  repeat: number,
+  mmsi: number,
+  packet: string,
+  channel: string,
+  country: string,
+  aidType: string,
+  name: string,
+  accuracy: string,
+  longitude: number,
+  latitude: number,
+  dimensionToBow: number,
+  dimensionToStern: number,
+  dimensionToPort: number,
+  dimensionToStarboard: number,
+  epfd: string,
+  second: number,
+  offPosition: string,
+  reserved: number,
+  spare: number,
+  raim: string,
+  virtualAidFlag: string,
+  assigned: string
+}

@@ -1,6 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef, ViewChild, AfterViewInit } from '@angular/core';
 import { RepositoryService } from '../../Shared/Services/repository.service';
-import { Message } from '../../Shared/Models/message.interface';
 import { ToastrService } from 'ngx-toastr';
 import { MdbTablePaginationComponent, MdbTableDirective } from 'angular-bootstrap-md';
 import { BehaviorSubject } from 'rxjs';
@@ -12,9 +11,9 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class MessagesListComponent implements OnInit, AfterViewInit {
 
-  messages: Message[];
-  messages$: BehaviorSubject<Message[]> = new BehaviorSubject<Message[]>([]);
-  previous: Message[] = [];
+  //messages: Message[];
+  //messages$: BehaviorSubject<Message[]> = new BehaviorSubject<Message[]>([]);
+  //previous: Message[] = [];
   messagesHeaders: string[] = ["Id", "Type", "Repeat", "MMSI", "Status", "ROT [deg/min]", "SOG [knots]", "Accuracy", "LON [deg]",
                                 "LAT [deg]", "COG [deg]", "HDG [deg]", "Timestamp [s]", "Maneuver", "RAIM"]
   @ViewChild(MdbTablePaginationComponent, { static: true }) mdbTablePagination: MdbTablePaginationComponent;
@@ -25,7 +24,7 @@ export class MessagesListComponent implements OnInit, AfterViewInit {
               private cdRef: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.getMessages();
+    //this.getMessages();
   }
 
   ngAfterViewInit(): void {
@@ -35,13 +34,13 @@ export class MessagesListComponent implements OnInit, AfterViewInit {
     this.cdRef.detectChanges();
   }
 
-  getMessages(): void {
-    this.repositoryService.getAllMessages().subscribe(response => {
-      this.messages$.next(response);
-      this.mdbTable.setDataSource(response);
-      this.previous = response;
-    }, error => {
-        this.toastr.error(error, "Problem!");
-    })
-  }
+  //getMessages(): void {
+  //  this.repositoryService.getAllMessages().subscribe(response => {
+  //    this.messages$.next(response);
+  //    this.mdbTable.setDataSource(response);
+  //    this.previous = response;
+  //  }, error => {
+  //      this.toastr.error(error, "Problem!");
+  //  })
+  //}
 }

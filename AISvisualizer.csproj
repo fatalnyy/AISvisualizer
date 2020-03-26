@@ -31,7 +31,23 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ClientApp\src\app\Shared\" />
+    <None Remove="ClientApp\src\app\Shared\Models\decodedMessages.interface.ts" />
+    <None Remove="ClientApp\src\app\Shared\Models\messageType2.interface.ts" />
+    <None Remove="ClientApp\src\app\Shared\Models\messageType21.interface.ts" />
+    <None Remove="ClientApp\src\app\Shared\Models\messageType3.interface.ts" />
+    <None Remove="ClientApp\src\app\Shared\Models\messageType4.interface.ts" />
+    <None Remove="ClientApp\src\app\Shared\Models\messageType5.interface.ts" />
+    <None Remove="ClientApp\src\app\Shared\Models\messageType9.interface.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\Shared\Models\decodedMessages.interface.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\Shared\Models\messageType2.interface.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\Shared\Models\messageType21.interface.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\Shared\Models\messageType3.interface.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\Shared\Models\messageType4.interface.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\Shared\Models\messageType5.interface.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\Shared\Models\messageType9.interface.ts" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
