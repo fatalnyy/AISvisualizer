@@ -45,9 +45,11 @@ namespace AISvisualizer.Models
             RAIM = decodeService.GetRAIMFlag(268, 1);
             VirtualAidFlag = decodeService.GetVirtualAidFlag();
             Assigned = decodeService.GetAssinged(270, 1);
+            Spare = decodeService.GetInt16(271, 1);
+            Reserved = decodeService.GetInt16(260, 8);
         }
 
-        public MessageType21() :base()
+        public MessageType21()
         {
         }
     }

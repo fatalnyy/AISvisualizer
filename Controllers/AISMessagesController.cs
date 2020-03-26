@@ -17,15 +17,13 @@ namespace AISvisualizer.Controllers
         private readonly IAISRepository _repository;
         private readonly ILogger<AISMessagesController> _logger;
         private readonly IFileService _fileService;
-        private readonly IDecodeService _decodeService;
         private readonly IMessageService _messageService;
 
-        public AISMessagesController(IAISRepository repository, ILogger<AISMessagesController> logger, IFileService fileService, IDecodeService decodeService, IMessageService messageService)
+        public AISMessagesController(IAISRepository repository, ILogger<AISMessagesController> logger, IFileService fileService, IMessageService messageService)
         {
             _repository = repository;
             _logger = logger;
             _fileService = fileService;
-            _decodeService = decodeService;
             _messageService = messageService;
         }
 
@@ -93,10 +91,5 @@ namespace AISvisualizer.Controllers
                 return BadRequest("Failed to decode AIS messages");
             }
         }
-    }
-    public class MyFileUploadClass
-    {
-        public IFormFile[] files { get; set; }
-        // other properties
     }
 }

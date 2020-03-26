@@ -36,6 +36,9 @@ namespace AISvisualizer.Models
             DTE = decodeService.GetDTE(142, 1);
             Assigned = decodeService.GetAssinged(146, 1);
             RAIM = decodeService.GetRAIMFlag(147, 1);
+            Spare = decodeService.GetInt16(143, 3);
+            RadioStatus = decodeService.GetInt32(148, 20);
+            Reserved = decodeService.GetInt16(134, 8);
         }
 
         public MessageType9()

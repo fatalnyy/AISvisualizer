@@ -49,6 +49,7 @@ namespace AISvisualizer.Models
             Draught = decodeService.GetDraught(294, 8);
             Destination = decodeService.GetString(302, 120);
             DTE = decodeService.GetDTE(422, 1);
+            Spare = decodeService.GetInt16(423, 1);
         }
 
         public MessageType5()

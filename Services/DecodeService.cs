@@ -10,221 +10,31 @@ namespace AISvisualizer.Services
 {
     public class DecodeService : IDecodeService
     {
-        //int counter = 0;
+
+        private readonly IExtractService _extractService;
         public string BinaryPayload { get; set; }
-        //public string FragmentOfPayload { get; set; }
-        //public string EncodedPayload { get; set; }
         public string Packet { get; set; }
         public string Channel { get; set; }
         public Int64 MMSI { get; set; }
         public DateTime? Date { get; set; }
 
-        private readonly IExtractService _extractService;
         public DecodeService(IExtractService extractService)
         {
             _extractService = extractService;
         }
 
-        //public async Task<DecodedMessages> GetDecodedMessage(IAsyncEnumerable<LineContent> lineContents)
-        //{
-        //    var decodedMessages = new DecodedMessages();
-
-        //    await foreach (var lineContent in lineContents)
-        //    {
-        //        var numSentences = Convert.ToInt32(lineContent.AISsentence.MessageCount);
-        //        var numFillBits = Convert.ToInt32(lineContent.AISsentence.Size.Substring(0, 1));
-        //        var fragmentNumber = Convert.ToInt32(lineContent.AISsentence.MessageNumber);
-
-        //        if (numSentences > 1 && fragmentNumber == 1)
-        //        {
-        //            FragmentOfPayload = lineContent.AISsentence.Payload;
-        //            continue;
-        //        }
-
-        //        if (numSentences > 1 && fragmentNumber == 2)
-        //            EncodedPayload = FragmentOfPayload + lineContent.AISsentence.Payload;
-        //        else
-        //            EncodedPayload = lineContent.AISsentence.Payload;
-
-        //        BinaryPayload = _extractService.GetBinaryPayload(EncodedPayload, numFillBits);
-        //        if (string.IsNullOrWhiteSpace(BinaryPayload)) continue;
-
-        //        Packet = lineContent.AISsentence.Format.Substring(1);
-        //        Channel = lineContent.AISsentence.Channel;
-        //        Date = DateTime.Parse(string.Format("{0} {1}", lineContent.Date, lineContent.Time));
-        //        MMSI = GetInt64(8, 30);
-
-        //        if (MMSI <= 99999999)
-        //        {
-        //            counter++;
-        //            continue;
-        //        }
-        //        var messageType = GetMessageType();
-
-        //        if (messageType > 0)
-        //        {
-        //            switch (messageType)
-        //            {
-        //                //case (Int16)Enums.Enums.MessageTypes.MessageType1:
-        //                //case (Int16)Enums.Enums.MessageTypes.MessageType2:
-        //                case (Int16)Enums.Enums.MessageTypes.MessageType1:
-        //                    MessageType1 messageType123 = new Message();
-        //                    decodedMessages.MessageType123s.Add(messageType123);
-        //                    break;
-        //                    //case (Int16)Enums.Enums.MessageTypes.MessageType4:
-        //                    //    MessageType4 messageType4 = GetMessageType4(messageType);
-        //                    //    decodedMessages.MessageType4s.Add(messageType4);
-        //                    //    break;
-        //                    //case (Int16)Enums.Enums.MessageTypes.MessageType5:
-        //                    //    MessageType5 messageType5 = GetMessageType5(messageType);
-        //                    //    decodedMessages.MessageType5s.Add(messageType5);
-        //                    //    break;
-        //                    //case (Int16)Enums.Enums.MessageTypes.MessageType9:
-        //                    //    MessageType9 messageType9 = GetMessageType9(messageType);
-        //                    //    decodedMessages.MessageType9s.Add(messageType9);
-        //                    //    break;
-        //                    //case (Int16)Enums.Enums.MessageTypes.MessageType21:
-        //                    //    MessageType21 messageType21 = GetMessageType21(messageType);
-        //                    //    decodedMessages.MessageType21s.Add(messageType21);
-        //                    //    break;
-        //                    //default:
-        //                    //    continue;
-        //            }
-        //        }
-        //        else
-        //            continue;
-        //    }
-        //    return decodedMessages;         
-        //}
-
-        //public MessageType123 GetMessageType123(Int16 messageType)
-        //{
-        //    return new MessageType123
-        //    {
-        //        MessageType = Enums.Enums.GetEnumDescription<Enums.Enums.MessageTypes>(messageType),
-        //        Repeat = GetInt16(6, 2),
-        //        MMSI = MMSI,
-        //        Packet = Packet,
-        //        Channel = Channel,
-        //        Status = GetNavigationStatus(),
-        //        ROT = GetRateOfTurn(),
-        //        SOG = GetSpeedOverGround(50, 10),
-        //        Accuracy = GetPositionAccuracy(60, 1),
-        //        Longitude = GetLongitude(61, 28),
-        //        Latitude = GetLatitude(89, 27),
-        //        COG = GetCourseOverGround(116, 12),
-        //        HDG = GetTrueHeading(),
-        //        Timestamp = GetInt16(137, 6),
-        //        Maneuver = GetManeuverIndicator(),
-        //        RAIM = GetRAIMFlag(148, 1),
-        //        Country = GetCountry()
-        //    };
-        //}
-
-        //public MessageType4 GetMessageType4(Int16 messageType)
-        //{
-        //    return new MessageType4
-        //    {
-        //        MessageType = Enums.Enums.GetEnumDescription<Enums.Enums.MessageTypes>(messageType),
-        //        Repeat = GetInt16(6, 2),
-        //        MMSI = MMSI,
-        //        Packet = Packet,
-        //        Channel = Channel,
-        //        Date = GetDateOfMessageType4(),
-        //        FixQuality = GetPositionAccuracy(78, 1),
-        //        Longitude = GetLongitude(79, 28),
-        //        Latitude = GetLatitude(107, 27),
-        //        EPFD = GetEPFD(134, 4),
-        //        RAIM = GetRAIMFlag(148, 1),
-        //        Country = GetCountry()
-        //    };
-        //}
-
-        //public MessageType5 GetMessageType5(Int16 messageType)
-        //{
-        //    return new MessageType5
-        //    {
-        //        MessageType = Enums.Enums.GetEnumDescription<Enums.Enums.MessageTypes>(messageType),
-        //        Repeat = GetInt16(6, 2),
-        //        MMSI = MMSI,
-        //        Packet = Packet,
-        //        Channel = Channel,
-        //        AISversion = GetAISversion(),
-        //        IMOnumber = GetInt64(40, 30),
-        //        CallSign = GetString(70, 42),
-        //        VesselName = GetString(112, 120),
-        //        ShipType = GetShipType(),
-        //        DimensionToBow = GetInt16(240, 9),
-        //        DimensionToStern = GetInt16(249, 9),
-        //        DimensionToPort = GetInt16(258, 6),
-        //        DimensionToStarboard = GetInt16(264, 6),
-        //        EPFD = GetEPFD(270, 4),
-        //        Month = GetPartOfDate(274, 4, true),
-        //        Day = GetPartOfDate(278, 5, false, true),
-        //        Hour = GetPartOfDate(283, 5, false, false, true),
-        //        Minute = GetPartOfDate(288, 6, false, false, false, true),
-        //        Draught = GetDraught(294, 8),
-        //        Destination = GetString(302, 120),
-        //        DTE = GetDTE(422, 1),
-        //        Country = GetCountry()
-        //    };
-        //}
-
-        //public MessageType9 GetMessageType9(Int16 messageType)
-        //{
-        //    return new MessageType9
-        //    {
-        //        MessageType = Enums.Enums.GetEnumDescription<Enums.Enums.MessageTypes>(messageType),
-        //        Repeat = GetInt16(6, 2),
-        //        MMSI = MMSI,
-        //        Packet = Packet,
-        //        Channel = Channel,
-        //        Altitude = GetAltitude(38, 12),
-        //        SOG = GetSpeedOverGround(50, 10),
-        //        Accuracy = GetPositionAccuracy(60, 1),
-        //        Longitude = GetLongitude(61, 28),
-        //        Latitude = GetLatitude(89, 27),
-        //        COG = GetCourseOverGround(116, 12),
-        //        Timestamp = GetInt16(128, 6),
-        //        DTE = GetDTE(142, 1),
-        //        Assigned = GetAssinged(146, 1),
-        //        RAIM = GetRAIMFlag(147, 1),
-        //        Country = GetCountry()
-        //    };
-        //}
-
-        //public MessageType21 GetMessageType21(Int16 messageType)
-        //{
-        //    return new MessageType21
-        //    {
-        //        MessageType = Enums.Enums.GetEnumDescription<Enums.Enums.MessageTypes>(messageType),
-        //        Repeat = GetInt16(6, 2),
-        //        MMSI = MMSI,
-        //        Packet = Packet,
-        //        Channel = Channel,
-        //        AidType = GetAidType(),
-        //        Name = GetString(43, 120),
-        //        Accuracy = GetPositionAccuracy(163, 1),
-        //        Longitude = GetLongitude(164, 28),
-        //        Latitude = GetLatitude(192, 27),
-        //        DimensionToBow = GetInt16(219, 9),
-        //        DimensionToStern = GetInt16(228, 9),
-        //        DimensionToPort = GetInt16(237, 6),
-        //        DimensionToStarboard = GetInt16(243, 6),
-        //        EPFD = GetEPFD(249, 4),
-        //        Second = GetInt16(253, 6),
-        //        OffPosition = GetOffPositionIndicator(),
-        //        RAIM = GetRAIMFlag(268, 1),
-        //        VirtualAidFlag = GetVirtualAidFlag(),
-        //        Assigned = GetAssinged(270, 1),
-        //        Country = GetCountry()
-        //    };
-        //}
-
         public Int16 GetInt16(int startIndex, int length)
         {
             var binValue = _extractService.ExtractBinaryFieldValue(BinaryPayload, startIndex, length);
             var value = Convert.ToInt16(binValue, 2);
+
+            return value;
+        }
+
+        public Int32 GetInt32(int startIndex, int length)
+        {
+            var binValue = _extractService.ExtractBinaryFieldValue(BinaryPayload, startIndex, length);
+            var value = Convert.ToInt32(binValue, 2);
 
             return value;
         }
@@ -385,12 +195,6 @@ namespace AISvisualizer.Services
             if (RAIMFlag == 1) return "In use";
             else if (RAIMFlag == 0) return "Not in use";
             else return "Error";
-        }
-
-        public string GetRadioStatus()
-        {
-            return null;
-            //return binaryPayload.Substring(149, 19);
         }
 
         public DateTime? GetDateOfMessageType4()
