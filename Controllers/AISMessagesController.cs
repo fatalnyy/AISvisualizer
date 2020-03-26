@@ -18,13 +18,15 @@ namespace AISvisualizer.Controllers
         private readonly ILogger<AISMessagesController> _logger;
         private readonly IFileService _fileService;
         private readonly IDecodeService _decodeService;
+        private readonly IMessageService _messageService;
 
-        public AISMessagesController(IAISRepository repository, ILogger<AISMessagesController> logger, IFileService fileService, IDecodeService decodeService)
+        public AISMessagesController(IAISRepository repository, ILogger<AISMessagesController> logger, IFileService fileService, IDecodeService decodeService, IMessageService messageService)
         {
             _repository = repository;
             _logger = logger;
             _fileService = fileService;
             _decodeService = decodeService;
+            _messageService = messageService;
         }
 
         [HttpGet]
@@ -33,7 +35,7 @@ namespace AISvisualizer.Controllers
         {
             try
             {
-                return Ok(_repository.GetAllMessages());
+                return null;// return Ok(_repository.GetAllMessages());
             }
             catch (Exception ex)
             {
@@ -50,10 +52,11 @@ namespace AISvisualizer.Controllers
             {
                 var files1 = Request.Form.Files;
                 //var saveToDb = Convert.ToBoolean(Request.Form.Keys.FirstOrDefault());
-                var saveToDb = false;
+                var saveToDb = true;
                 var lineContents = _fileService.GetLineContents(files);
 
-                var decodedMessages = await _decodeService.GetDecodedMessage(lineContents);
+                var decodedMessages = await _messageService.GetDecodedMessage(lineContents);
+                //var decodedMessages = await _decodeService.GetDecodedMessage(lineContents);
                 //var messages = new List<Message>();
                 //await foreach (var lineContent in lineContents)
                 //{
@@ -61,25 +64,28 @@ namespace AISvisualizer.Controllers
 
                 //    if (decodedMessage != null) messages.Add(decodedMessage);
                 //}
+                //var witgoutdups = decodedMessages.MessageType123s.GroupBy(p => p.MMSI).Select(x => x.First()).ToList();
+                //var witgoutdups1 = decodedMessages.MessageType5s.GroupBy(p => p.MMSI).Select(x => x.First()).ToList();
+                //var witgoutdups2 = decodedMessages.MessageType21s.GroupBy(p => p.MMSI).Select(x => x.First()).ToList();
 
-                if (saveToDb)
-                {
-                    _repository.AddMessages(decodedMessages.MessageType5s);
-                    _repository.SaveAll();
+                //if (saveToDb)
+                //{
+                //    _repository.AddMessages(witgoutdups1);
+                //    _repository.SaveAll();
 
-                    return Created("/api/AISMessages", decodedMessages);
-                }
-                int counter = 0;
-                var messagetype123s = decodedMessages.MessageType123s;
-                var messagetype5s = decodedMessages.MessageType5s;
+                //    return Created("/api/AISMessages", decodedMessages);
+                //}
+                //int counter = 0;
+                ////var messagetype123s = decodedMessages.MessageType123s;
+                //var messagetype5s = decodedMessages.MessageType5s;
 
-                foreach (var message in decodedMessages.MessageType123s)
-                    message.MessageType5 = decodedMessages.MessageType5s.Where(p => p.MMSI == message.MMSI).FirstOrDefault();
-                foreach (var message in decodedMessages.MessageType123s)
-                {
-                    if (message.MessageType5 != null) counter++;
-                }
-                return Ok(decodedMessages);
+                //foreach (var message in decodedMessages.MessageType123s)
+                //    message.MessageType5 = decodedMessages.MessageType5s.Where(p => p.MMSI == message.MMSI).FirstOrDefault();
+                //foreach (var message in decodedMessages.MessageType123s)
+                //{
+                //    if (message.MessageType5 != null) counter++;
+                //}
+                return null;//return Ok(decodedMessages);
             }
             catch (Exception ex)
             { 

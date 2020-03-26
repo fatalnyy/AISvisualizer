@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace AISvisualizer.Models
 {
-    public class AISmessage
+    public class AISsentence
     {
         public string Format { get; set; }
         public string MessageCount { get; set; }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AISvisualizer.Services;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -6,15 +7,8 @@ using System.Threading.Tasks;
 
 namespace AISvisualizer.Models
 {
-    public class MessageType21
+    public class MessageType21 : Message
     {
-        public string MessageType { get; set; }
-        public Int16 Repeat { get; set; }
-        [Key]
-        public Int64 MMSI { get; set; }
-
-        public string Packet { get; set; }
-        public string Channel { get; set; }
         public string AidType { get; set; }
         public string Name { get; set; }
         public string Accuracy { get; set; }
@@ -27,9 +21,34 @@ namespace AISvisualizer.Models
         public string EPFD { get; set; }
         public Int16 Second { get; set; }
         public string OffPosition { get; set; }
+        public Int16 Reserved { get; set; }
+        public Int16 Spare { get; set; }
         public string RAIM { get; set; }
         public string VirtualAidFlag { get; set; }
         public string Assigned { get; set; }
-        public string Country { get; set; }
+
+        public MessageType21(short messageType, IDecodeService decodeService) 
+            : base(messageType, decodeService)
+        {
+            AidType = decodeService.GetAidType();
+            Name = decodeService.GetString(43, 120);
+            Accuracy = decodeService.GetPositionAccuracy(163, 1);
+            Longitude = decodeService.GetLongitude(164, 28);
+            Latitude = decodeService.GetLatitude(192, 2);
+            DimensionToBow = decodeService.GetInt16(219, 9);
+            DimensionToStern = decodeService.GetInt16(228, 9);
+            DimensionToPort = decodeService.GetInt16(237, 6);
+            DimensionToStarboard = decodeService.GetInt16(243, 6);
+            EPFD = decodeService.GetEPFD(249, 4);
+            Second = decodeService.GetInt16(253, 6);
+            OffPosition = decodeService.GetOffPositionIndicator();
+            RAIM = decodeService.GetRAIMFlag(268, 1);
+            VirtualAidFlag = decodeService.GetVirtualAidFlag();
+            Assigned = decodeService.GetAssinged(270, 1);
+        }
+
+        public MessageType21() :base()
+        {
+        }
     }
 }

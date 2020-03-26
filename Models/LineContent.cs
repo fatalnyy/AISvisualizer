@@ -9,6 +9,6 @@ namespace AISvisualizer.Models
     {
         public string Date { get; set; }
         public string Time { get; set; }
-        public AISmessage AISmessage { get; set; }
+        public AISsentence AISsentence { get; set; }
     }
 }

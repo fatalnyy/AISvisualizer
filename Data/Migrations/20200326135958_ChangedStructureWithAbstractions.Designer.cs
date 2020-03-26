@@ -4,14 +4,16 @@ using AISvisualizer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AISvisualizer.Migrations
 {
     [DbContext(typeof(AISDbContext))]
-    partial class AISDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200326135958_ChangedStructureWithAbstractions")]
+    partial class ChangedStructureWithAbstractions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,9 +61,6 @@ namespace AISvisualizer.Migrations
                     b.Property<string>("MessageType")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MessageType5_Id")
-                        .HasColumnType("int");
-
                     b.Property<string>("Packet")
                         .HasColumnType("nvarchar(max)");
 
@@ -93,9 +92,12 @@ namespace AISvisualizer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("messageType5_id")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("MessageType5_Id");
+                    b.HasIndex("messageType5_id");
 
                     b.ToTable("MessagesType1");
 
@@ -417,7 +419,7 @@ namespace AISvisualizer.Migrations
                 {
                     b.HasOne("AISvisualizer.Models.MessageType5", "MessageType5")
                         .WithMany()
-                        .HasForeignKey("MessageType5_Id")
+                        .HasForeignKey("messageType5_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

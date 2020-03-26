@@ -7,10 +7,12 @@ namespace AISvisualizer.Models
 {
     public class DecodedMessages
     {
-        public List<MessageType123> MessageType123s { get; set; } = new List<MessageType123>();
-        public List<MessageType4> MessageType4s { get; set; } = new List<MessageType4>();
-        public List<MessageType5> MessageType5s { get; set; } = new List<MessageType5>();
-        public List<MessageType9> MessageType9s { get; set; } = new List<MessageType9>();
-        public List<MessageType21> MessageType21s { get; set; } = new List<MessageType21>();
+        public List<MessageType1> MessagesType1 { get; set; } = new List<MessageType1>();
+        public List<MessageType2> MessagesType2 { get; set; } = new List<MessageType2>();
+        public List<MessageType3> MessagesType3 { get; set; } = new List<MessageType3>();
+        public List<MessageType4> MessagesType4 { get; set; } = new List<MessageType4>();
+        public List<MessageType5> MessagesType5 { get; set; } = new List<MessageType5>();
+        public List<MessageType9> MessagesType9 { get; set; } = new List<MessageType9>();
+        public List<MessageType21> MessagesType21 { get; set; } = new List<MessageType21>();
     }
 }

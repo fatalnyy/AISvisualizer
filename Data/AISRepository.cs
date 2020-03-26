@@ -17,18 +17,18 @@ namespace AISvisualizer.Data
             _logger = logger;
         }
 
-        public IEnumerable<MessageType123> GetAllMessages()
-        {
-            try
-            {
-                return null;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogInformation($"Failed to get all messages: {ex}");
-                return null;
-            }
-        }
+        //public IEnumerable<MessageType123> GetAllMessages()
+        //{
+        //    try
+        //    {
+        //        return null;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogInformation($"Failed to get all messages: {ex}");
+        //        return null;
+        //    }
+        //}
 
         public void AddMessages(IEnumerable<MessageType5> messages)
         {

@@ -4,14 +4,16 @@ using AISvisualizer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AISvisualizer.Migrations
 {
     [DbContext(typeof(AISDbContext))]
-    partial class AISDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200325220853_ChangedStructure1")]
+    partial class ChangedStructure1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,6 +43,10 @@ namespace AISvisualizer.Migrations
                     b.Property<DateTime?>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<short?>("HDG")
                         .HasColumnType("smallint");
 
@@ -59,9 +65,6 @@ namespace AISvisualizer.Migrations
                     b.Property<string>("MessageType")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MessageType5_Id")
-                        .HasColumnType("int");
-
                     b.Property<string>("Packet")
                         .HasColumnType("nvarchar(max)");
 
@@ -70,9 +73,6 @@ namespace AISvisualizer.Migrations
 
                     b.Property<double?>("ROT")
                         .HasColumnType("float");
-
-                    b.Property<int>("RadioStatus")
-                        .HasColumnType("int");
 
                     b.Property<short>("Repeat")
                         .HasColumnType("smallint");
@@ -89,17 +89,16 @@ namespace AISvisualizer.Migrations
                     b.Property<short>("Timestamp")
                         .HasColumnType("smallint");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("messageType5_id")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MessageType5_Id");
+                    b.HasIndex("messageType5_id");
 
                     b.ToTable("MessagesType1");
 
-                    b.HasDiscriminator<string>("Type").HasValue("1");
+                    b.HasDiscriminator<string>("Discriminator").HasValue("MessageType1");
                 });
 
             modelBuilder.Entity("AISvisualizer.Models.MessageType21", b =>
@@ -403,21 +402,21 @@ namespace AISvisualizer.Migrations
                 {
                     b.HasBaseType("AISvisualizer.Models.MessageType1");
 
-                    b.HasDiscriminator().HasValue("2");
+                    b.HasDiscriminator().HasValue("MessageType2");
                 });
 
             modelBuilder.Entity("AISvisualizer.Models.MessageType3", b =>
                 {
-                    b.HasBaseType("AISvisualizer.Models.MessageType1");
+                    b.HasBaseType("AISvisualizer.Models.MessageType2");
 
-                    b.HasDiscriminator().HasValue("3");
+                    b.HasDiscriminator().HasValue("MessageType3");
                 });
 
             modelBuilder.Entity("AISvisualizer.Models.MessageType1", b =>
                 {
                     b.HasOne("AISvisualizer.Models.MessageType5", "MessageType5")
                         .WithMany()
-                        .HasForeignKey("MessageType5_Id")
+                        .HasForeignKey("messageType5_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

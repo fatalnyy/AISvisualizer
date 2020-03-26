@@ -57,7 +57,7 @@ namespace AISvisualizer.Services
                         {
                             Date = splittedLine[0],
                             Time = splittedLine[1],
-                            AISmessage = new AISmessage
+                            AISsentence = new AISsentence
                             {
                                 Format = splittedAISmessage[0],
                                 MessageCount = splittedAISmessage[1],
