@@ -15,6 +15,8 @@ import { MessagesListModule } from './modules/messages-list/messages-list.module
 import { MessagesListComponent } from './modules/messages-list/messages-list.component';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { ToastrModule } from 'ngx-toastr';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,6 +31,7 @@ import { ToastrModule } from 'ngx-toastr';
     FormsModule,
     VisualizerModule,
     MessagesListModule,
+    NgbModule,
     ToastrModule.forRoot(),
     MDBBootstrapModule.forRoot(),
     RouterModule.forRoot([

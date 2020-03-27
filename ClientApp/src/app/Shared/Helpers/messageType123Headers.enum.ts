@@ -1,0 +1,21 @@
+export enum MessageType123Headers {
+  Date = "Date",
+  Repeat = "Repeat",
+  MMSI = "MMSI",
+  Packet = "Packet",
+  Channel = "Channel",
+  Country = "Country",
+  Status = "Status",
+  ROT = "ROT [deg/min]",
+  SOG = "SOG [knots]",
+  Accuracy = "Accuracy",
+  LON = "LON [deg]",
+  LAT = "LAT [deg]",
+  COG = "COG [deg]",
+  HDG = "HDG [deg]",
+  Timestamp = "Timestamp [s]",
+  Maneuver = "Maneuver",
+  Spare = "Spare",
+  RAIM = "RAIM",
+  Radio = "Radio"
+}

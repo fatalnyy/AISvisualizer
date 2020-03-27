@@ -1,0 +1,22 @@
+export enum MessageType4Headers {
+  Date = "Date",
+  Repeat = "Repeat",
+  MMSI = "MMSI",
+  Packet = "Packet",
+  Channel = "Channel",
+  Country = "Country",
+  Status = "Status",
+  Year = "Year",
+  Month = "Month",
+  Day = "Day",
+  Hour = "Hour",
+  Minute = "Minute",
+  Second = "Second",
+  FixQuality = "FixQuality",
+  LON = "LON [deg]",
+  LAT = "LAT [deg]",
+  EPFD = "EPFD",
+  RAIM = "RAIM",
+  Spare = "Spare",
+  Radio = "Radio"
+}

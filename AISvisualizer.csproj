@@ -31,6 +31,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\Shared\Helpers\messageType123Headers.enum.ts" />
+    <None Remove="ClientApp\src\app\Shared\Helpers\messageType21Headers.enum.ts" />
+    <None Remove="ClientApp\src\app\Shared\Helpers\messageType4Headers.enum.ts" />
+    <None Remove="ClientApp\src\app\Shared\Helpers\messageType5Headers.enum.ts" />
+    <None Remove="ClientApp\src\app\Shared\Helpers\messageType9Headers.enum.ts" />
+    <None Remove="ClientApp\src\app\Shared\Helpers\messageTypes.enum.ts" />
     <None Remove="ClientApp\src\app\Shared\Models\decodedMessages.interface.ts" />
     <None Remove="ClientApp\src\app\Shared\Models\messageType2.interface.ts" />
     <None Remove="ClientApp\src\app\Shared\Models\messageType21.interface.ts" />
@@ -41,6 +47,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\Shared\Helpers\messageType123Headers.enum.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\Shared\Helpers\messageType21Headers.enum.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\Shared\Helpers\messageType4Headers.enum.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\Shared\Helpers\messageType5Headers.enum.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\Shared\Helpers\messageType9Headers.enum.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\Shared\Helpers\messageTypes.enum.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\Shared\Models\decodedMessages.interface.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\Shared\Models\messageType2.interface.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\Shared\Models\messageType21.interface.ts" />

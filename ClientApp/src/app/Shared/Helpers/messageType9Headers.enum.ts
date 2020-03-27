@@ -1,0 +1,21 @@
+export enum MessageType9Headers {
+  Date = "Date",
+  Repeat = "Repeat",
+  MMSI = "MMSI",
+  Packet = "Packet",
+  Channel = "Channel",
+  Country = "Country",
+  Alt = "Alt [m]",
+  SOG = "SOG [knots]",
+  Accuracy = "Accuracy",
+  LON = "LON [deg]",
+  LAT= "LAT [deg]",
+  COG = "COG [deg]",
+  Timestamp = "Timestamp [s]",
+  Reserved = "Reserved",
+  DTE = "DTE",
+  Assigned = "Assigned",
+  RAIM = "RAIM",
+  Spare = "Spare",
+  Radio = "Radio"
+}

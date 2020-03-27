@@ -34,11 +34,31 @@ namespace AISvisualizer.Controllers
 
         [HttpGet]
         [Route("GetAllMessages")]
-        public IActionResult GetMessages()
+        public IActionResult GetMessages(string type)
         {
+            var type1 = Convert.ToInt16(type);
+
             try
             {
-                return null;// return Ok(_repository.GetAllMessages());
+                switch (type1)
+                {
+                    case (Int16)Enums.Enums.MessageTypes.MessageType1:
+                        return Ok(_repository.GetAllMessages<MessageType1>());
+                    case (Int16)Enums.Enums.MessageTypes.MessageType2:
+                        return Ok(_repository.GetAllMessages<MessageType2>());
+                    case (Int16)Enums.Enums.MessageTypes.MessageType3:
+                        return Ok(_repository.GetAllMessages<MessageType3>());
+                    case (Int16)Enums.Enums.MessageTypes.MessageType4:
+                        return Ok(_repository.GetAllMessages<MessageType4>());
+                    case (Int16)Enums.Enums.MessageTypes.MessageType5:
+                        return Ok(_repository.GetAllMessages<MessageType5>());
+                    case (Int16)Enums.Enums.MessageTypes.MessageType9:
+                        return Ok(_repository.GetAllMessages<MessageType9>());
+                    case (Int16)Enums.Enums.MessageTypes.MessageType21:
+                        return Ok(_repository.GetAllMessages<MessageType21>());
+                }
+
+                return BadRequest("Failed to get mesagges");
             }
             catch (Exception ex)
             {

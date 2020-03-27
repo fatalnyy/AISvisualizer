@@ -1,0 +1,30 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var MessageType5Headers;
+(function (MessageType5Headers) {
+    MessageType5Headers["Date"] = "Date";
+    MessageType5Headers["Repeat"] = "Repeat";
+    MessageType5Headers["MMSI"] = "MMSI";
+    MessageType5Headers["Packet"] = "Packet";
+    MessageType5Headers["Channel"] = "Channel";
+    MessageType5Headers["Country"] = "Country";
+    MessageType5Headers["Ais"] = "AIS";
+    MessageType5Headers["IMO"] = "IMO";
+    MessageType5Headers["CallSign"] = "Call Sign";
+    MessageType5Headers["Name"] = "Name";
+    MessageType5Headers["Type"] = "Type";
+    MessageType5Headers["ToBow"] = "To Bow [m]";
+    MessageType5Headers["ToStern"] = "To Stern [m]";
+    MessageType5Headers["ToPort"] = "To Port [m]";
+    MessageType5Headers["ToStarboard"] = "To Starboard [m]";
+    MessageType5Headers["EPFD"] = "EPFD";
+    MessageType5Headers["Month"] = "Month";
+    MessageType5Headers["Day"] = "Day";
+    MessageType5Headers["Hour"] = "Hour";
+    MessageType5Headers["Minute"] = "Minute";
+    MessageType5Headers["Draught"] = "Draught [m/10]";
+    MessageType5Headers["Destination"] = "Destination";
+    MessageType5Headers["Spare"] = "Spare";
+    MessageType5Headers["DTE"] = "DTE";
+})(MessageType5Headers = exports.MessageType5Headers || (exports.MessageType5Headers = {}));
+//# sourceMappingURL=messageType5Headers.enum.js.map
