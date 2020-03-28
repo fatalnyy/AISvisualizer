@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using AISvisualizer.Data;
@@ -20,16 +21,18 @@ namespace AISvisualizer.Controllers
         private readonly IFileService _fileService;
         private readonly IMessageService _messageService;
         private readonly IMapper _mapper;
+        private readonly IDatabaseService _databaseService;
 
         public AISMessagesController(IAISRepository repository, ILogger<AISMessagesController> logger, 
                                         IFileService fileService, IMessageService messageService,
-                                        IMapper mapper)
+                                        IMapper mapper, IDatabaseService databaseService)
         {
             _repository = repository;
             _logger = logger;
             _fileService = fileService;
             _messageService = messageService;
             _mapper = mapper;
+            _databaseService = databaseService;
         }
 
         [HttpGet]
@@ -74,14 +77,58 @@ namespace AISvisualizer.Controllers
             try
             {
                 //var saveToDb = Convert.ToBoolean(Request.Form.Keys.FirstOrDefault());
-                var saveToDb = false;
+                var saveToDb = true;
                 var lineContents = _fileService.GetLineContents(files);
 
                 var decodedMessages = await _messageService.GetDecodedMessage(lineContents);
 
                 if (saveToDb)
                 {
-                    _repository.AddMessages(decodedMessages);
+                    string iud = "add";
+                    DataTable dataTable;
+
+                    if (decodedMessages.MessagesType1.Count > 0)
+                    {
+                        dataTable = _databaseService.GetDataTableParameter(decodedMessages.MessagesType1, (Int16)Enums.Enums.MessageTypes.MessageType1);
+                        if (dataTable != null && dataTable.Rows.Count > 0) _databaseService.RunPrcDataTableType(iud, "dbo.prc_addMessageType123", dataTable);
+                    }
+
+                    if (decodedMessages.MessagesType2.Count > 0)
+                    {
+                        dataTable = _databaseService.GetDataTableParameter(decodedMessages.MessagesType2, (Int16)Enums.Enums.MessageTypes.MessageType2);
+                        if (dataTable != null && dataTable.Rows.Count > 0) _databaseService.RunPrcDataTableType(iud, "dbo.prc_addMessageType123", dataTable);
+                    }
+                   
+                    if (decodedMessages.MessagesType3.Count > 0)
+                    {
+                        dataTable = _databaseService.GetDataTableParameter(decodedMessages.MessagesType3, (Int16)Enums.Enums.MessageTypes.MessageType3);
+                        if (dataTable != null && dataTable.Rows.Count > 0) _databaseService.RunPrcDataTableType(iud, "dbo.prc_addMessageType123", dataTable);
+                    }
+                   
+                    if (decodedMessages.MessagesType4.Count > 0)
+                    {
+                        dataTable = _databaseService.GetDataTableParameter(decodedMessages.MessagesType4);
+                        if (dataTable != null && dataTable.Rows.Count > 0) _databaseService.RunPrcDataTableType(iud, "dbo.prc_addMessageType4", dataTable);
+                    }
+                   
+                    if (decodedMessages.MessagesType5.Count > 0)
+                    {
+                        dataTable = _databaseService.GetDataTableParameter(decodedMessages.MessagesType5);
+                        if (dataTable != null && dataTable.Rows.Count > 0) _databaseService.RunPrcDataTableType(iud, "dbo.prc_addMessageType5", dataTable);
+                    }
+                    
+                    if (decodedMessages.MessagesType9.Count > 0)
+                    {
+                        dataTable = _databaseService.GetDataTableParameter(decodedMessages.MessagesType9);
+                        if (dataTable != null && dataTable.Rows.Count > 0) _databaseService.RunPrcDataTableType(iud, "dbo.prc_addMessageType9", dataTable);
+                    }
+
+                    if (decodedMessages.MessagesType21.Count > 0)
+                    {
+                        dataTable = _databaseService.GetDataTableParameter(decodedMessages.MessagesType21);
+                        if (dataTable != null && dataTable.Rows.Count > 0) _databaseService.RunPrcDataTableType(iud, "dbo.prc_addMessageType21", dataTable);
+                    }
+
                     _repository.SaveAll();
                 }
 

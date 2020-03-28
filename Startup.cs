@@ -51,6 +51,7 @@ namespace AISvisualizer
             services.AddTransient<IExtractService, ExtractService>();
             services.AddTransient<IDecodeService, DecodeService>();
             services.AddTransient<IMessageService, MessageService>();
+            services.AddTransient<IDatabaseService, DatabaseService>();
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
         }
