@@ -10,8 +10,8 @@ namespace AISvisualizer.Models
 {
     public class MessageType5 : Message
     {
-        public string AISversion { get; set; }
-        public Int64 IMOnumber { get; set; }
+        public string AisVersion { get; set; }
+        public Int64 ImoNumber { get; set; }
         public string CallSign { get; set; }
         public string VesselName { get; set; }
         public string ShipType { get; set; }
@@ -32,8 +32,8 @@ namespace AISvisualizer.Models
         public MessageType5(short messageType, IDecodeService decodeService) 
             : base(messageType, decodeService)
         {
-            AISversion = decodeService.GetAISversion();
-            IMOnumber = decodeService.GetInt64(40, 30);
+            AisVersion = decodeService.GetAISversion();
+            ImoNumber = decodeService.GetInt64(40, 30);
             CallSign = decodeService.GetString(70, 42);
             VesselName = decodeService.GetString(112, 120);
             ShipType = decodeService.GetShipType();
