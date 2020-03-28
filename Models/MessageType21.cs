@@ -34,7 +34,7 @@ namespace AISvisualizer.Models
             Name = decodeService.GetString(43, 120);
             Accuracy = decodeService.GetPositionAccuracy(163, 1);
             Longitude = decodeService.GetLongitude(164, 28);
-            Latitude = decodeService.GetLatitude(192, 2);
+            Latitude = decodeService.GetLatitude(192, 27);
             DimensionToBow = decodeService.GetInt16(219, 9);
             DimensionToStern = decodeService.GetInt16(228, 9);
             DimensionToPort = decodeService.GetInt16(237, 6);
