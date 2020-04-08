@@ -77,7 +77,7 @@ namespace AISvisualizer.Controllers
             try
             {
                 //var saveToDb = Convert.ToBoolean(Request.Form.Keys.FirstOrDefault());
-                var saveToDb = true;
+                var saveToDb = false;
                 var lineContents = _fileService.GetLineContents(files);
 
                 var decodedMessages = await _messageService.GetDecodedMessage(lineContents);
@@ -128,8 +128,6 @@ namespace AISvisualizer.Controllers
                         dataTable = _databaseService.GetDataTableParameter(decodedMessages.MessagesType21);
                         if (dataTable != null && dataTable.Rows.Count > 0) _databaseService.RunPrcDataTableType(iud, "dbo.prc_addMessageType21", dataTable);
                     }
-
-                    _repository.SaveAll();
                 }
 
                 var decodedMessagesVM = _mapper.Map<DecodedMessages, DecodedMessagesViewModel>(decodedMessages);
@@ -140,9 +138,18 @@ namespace AISvisualizer.Controllers
                     message.MessageType5 = decodedMessages.MessagesType5.Where(p => p.MMSI == message.MMSI).FirstOrDefault();
                 foreach (var message in decodedMessagesVM.MessagesType3)
                     message.MessageType5 = decodedMessages.MessagesType5.Where(p => p.MMSI == message.MMSI).FirstOrDefault();
+                var messages = new List<MessageType1ViewModel>();
+                foreach (var item in decodedMessagesVM.MessagesType1)
+                {
+                    if (item.Latitude <= -90.0 || item.Latitude >= 90.0) continue;
+                    if (item.Longitude <= -180.0 || item.Longitude >= 180.0) continue;
+
+                    messages.Add(item);
+                }
+                decodedMessagesVM.MessagesType1 = messages;
 
                 if (saveToDb) return Created("api/messages-list", decodedMessagesVM);
-                else return Ok(decodedMessages);
+                else return Ok(decodedMessagesVM);
             }
             catch (Exception ex)
             { 

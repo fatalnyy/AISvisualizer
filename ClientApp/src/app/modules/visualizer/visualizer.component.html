@@ -1,3 +1,7 @@
 <p>Upload</p>
 <input #file type="file" multiple (change)="uploadFiles(file.files)" />
 <button type="button" class="btn-dark btn-outline-danger" (click)="clickedMethod()"></button>
+<div id="map" class="map"></div>
+<ng-template #fetching>
+  <p>Load File first</p>
+</ng-template>

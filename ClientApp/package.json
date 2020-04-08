@@ -26,6 +26,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.12.1",
     "@ng-bootstrap/ng-bootstrap": "^5.2.1",
     "@nguniversal/module-map-ngfactory-loader": "8.1.1",
+    "@types/ol": "^6.2.0",
     "angular-bootstrap-md": "^8.10.1",
     "aspnet-prerendering": "^3.0.1",
     "bootstrap": "^4.4.1",
@@ -37,8 +38,11 @@
     "mdbootstrap": "^4.14.1",
     "ngx-toastr": "^11.3.3",
     "oidc-client": "^1.10.1",
+    "ol": "6.3.1",
+    "ol-mapbox-style": "6.1.1",
     "popper.js": "^1.16.1",
     "rxjs": "^6.5.4",
+    "save": "^2.4.0",
     "zone.js": "0.9.1"
   },
   "devDependencies": {

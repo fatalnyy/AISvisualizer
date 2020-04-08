@@ -4,7 +4,6 @@ import { MDBBootstrapModule, WavesModule } from 'angular-bootstrap-md';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-
 @NgModule({
   declarations: [],
   imports: [
