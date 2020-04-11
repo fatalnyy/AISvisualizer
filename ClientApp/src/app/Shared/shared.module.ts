@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MDBBootstrapModule, WavesModule } from 'angular-bootstrap-md';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { AngularFontAwesomeModule } from 'angular-font-awesome';
 
 @NgModule({
   declarations: [],
@@ -11,8 +12,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     MDBBootstrapModule,
     WavesModule,
     RouterModule,
-    NgbModule
+    NgbModule,
+    AngularFontAwesomeModule
   ],
-  exports: [MDBBootstrapModule, WavesModule, NgbModule]
+  exports: [MDBBootstrapModule, WavesModule, NgbModule, AngularFontAwesomeModule]
 })
 export class SharedModule { }
