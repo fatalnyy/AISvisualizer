@@ -53,6 +53,8 @@ namespace AISvisualizer.Services
 
                 if (_decodeService.MMSI <= 99999999)
                 {
+                    //if (_decodeService.GetMessageType() > 3 && _decodeService.MMSI >= 999) counter++;
+                    //else continue;
                     counter++;
                     continue;
                 }

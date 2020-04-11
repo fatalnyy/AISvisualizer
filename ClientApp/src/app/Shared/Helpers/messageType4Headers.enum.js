@@ -8,7 +8,6 @@ var MessageType4Headers;
     MessageType4Headers["Packet"] = "Packet";
     MessageType4Headers["Channel"] = "Channel";
     MessageType4Headers["Country"] = "Country";
-    MessageType4Headers["Status"] = "Status";
     MessageType4Headers["Year"] = "Year";
     MessageType4Headers["Month"] = "Month";
     MessageType4Headers["Day"] = "Day";

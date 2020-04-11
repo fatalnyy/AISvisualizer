@@ -15,7 +15,7 @@ namespace AISvisualizer.Enums
             MessageType1 = 1,
             [Description("Position Report Class A (Assigned schedule)")]
             MessageType2 = 2,
-            [Description("Position Report Class A(Response to interrogation")]
+            [Description("Position Report Class A(Response to interrogation)")]
             MessageType3 = 3,
             [Description("Base Station Report")]
             MessageType4 = 4,

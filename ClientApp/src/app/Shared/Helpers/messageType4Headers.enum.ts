@@ -5,7 +5,6 @@ export enum MessageType4Headers {
   Packet = "Packet",
   Channel = "Channel",
   Country = "Country",
-  Status = "Status",
   Year = "Year",
   Month = "Month",
   Day = "Day",

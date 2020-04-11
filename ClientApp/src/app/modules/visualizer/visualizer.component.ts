@@ -286,8 +286,8 @@ export class VisualizerComponent implements OnInit{
     this.pointsLayerType2 = this.getPointsLayers(vectorSourceType2, 'shipType2.svg');
     this.pointsLayerType3 = this.getPointsLayers(vectorSourceType3, 'shipType3.svg');
     this.pointsLayerType4 = this.getPointsLayers(vectorSourceType4, 'type4.svg');
-    this.pointsLayerType9 = this.getPointsLayers(vectorSourceType9, 'type99.svg');
-    this.pointsLayerType21 = this.getPointsLayers(vectorSourceType21, 'type21.svg');
+    this.pointsLayerType9 = this.getPointsLayers(vectorSourceType9, 'type9.svg');
+    this.pointsLayerType21 = this.getPointsLayers(vectorSourceType21, 'type211.svg');
 
     this.map.addLayer(this.pointsLayerType1);
     this.map.addLayer(this.pointsLayerType2);
