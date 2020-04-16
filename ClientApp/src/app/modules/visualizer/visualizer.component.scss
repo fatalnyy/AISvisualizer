@@ -14,6 +14,7 @@
   left: -50px;
   min-width: 400px;
 }
+
 .ol-popup .header {
   border-bottom: 1px solid #5c6263;
   border-radius: 5px 5px 0 0
@@ -24,12 +25,14 @@
   border-top: 1px solid #5c6263;
   border-radius: 0 0 5px 5px
 }
+
 .ol-popup .messageType5-footer {
   border: none;
   border-top: 1px solid #5c6263;
   border-radius: 0 0 5px 5px;
   font-size: 11px;
 }
+
 .ol-popup .footer .footer-content {
   font-size: 11px;
 }
@@ -39,6 +42,18 @@
   font-size:16px;
 }
 
+.ol-popup .header .header-img {
+  border: none;
+  border-top: 1px solid #5c6263;
+  border-radius: 0 0 5px 5px;
+  margin-bottom:2px;
+  margin-top:2px;
+}
+
+.ol-popup .header .header-img .shipImg {
+  margin-top: 5px;
+}
+
 .ol-popup .header .header-type {
   font-size: 11px;
 }
@@ -46,6 +61,7 @@
 .ol-popup .content{
     font-size: 11px;
 }
+
 .ol-popup:after, .ol-popup:before {
   top: 100%;
   border: solid transparent;

@@ -10,7 +10,6 @@ namespace AISvisualizer.Services
     {
         private readonly IDecodeService _decodeService;
         private readonly IExtractService _extractService;
-        int counter = 0;
         public string BinaryPayload { get; set; }
         public string FragmentOfPayload { get; set; }
         public string EncodedPayload { get; set; }
@@ -51,14 +50,11 @@ namespace AISvisualizer.Services
                 _decodeService.Date = DateTime.Parse(string.Format("{0} {1}", lineContent.Date, lineContent.Time));
                 _decodeService.MMSI = _decodeService.GetInt64(8, 30);
 
-                if (_decodeService.MMSI <= 99999999)
-                {
-                    //if (_decodeService.GetMessageType() > 3 && _decodeService.MMSI >= 999) counter++;
-                    //else continue;
-                    counter++;
-                    continue;
-                }
                 var messageType = _decodeService.GetMessageType();
+
+                if (_decodeService.MMSI <= 99999999 && messageType != 4 && messageType != 9 && messageType != 21)
+                    continue;
+
 
                 if (messageType > 0)
                 {

@@ -7,11 +7,13 @@
   <a href="#" id="popup-closer" class="ol-popup-closer"></a>
   <div *ngIf="marker">
     <div id="popup-title" class="header">
-      <ng-template [ngIf]="marker.messageType == 'Position Report Class A' || marker.messageType == 'Position Report Class A (Assigned schedule)' || marker.messageType == 'Position Report Class A(Response to interrogation'">
-        <div id="popup-header-name" class="header-name">
+      <div id="popup-header-name" class="header-name">
+        <ng-template [ngIf]="marker.messageType == 'Position Report Class A' || marker.messageType == 'Position Report Class A (Assigned schedule)' || marker.messageType == 'Position Report Class A(Response to interrogation)'">
+
           <ng-template [ngIf]="marker.messageType5">
             <div class="row">
-              <div class="col-md-6">{{ marker.messageType5.vesselName }}</div>
+              <div class="col-md-1"><img src="assets/flags/{{ marker.country }}.png"></div>
+              <div class="col-md-5">{{ marker.messageType5.vesselName }}</div>
               <div class="col-md-6">
                 DST<i class="fa fa-long-arrow-right" aria-hidden="true"></i> {{marker.messageType5.destination}}
               </div>
@@ -19,19 +21,34 @@
           </ng-template>
           <ng-template [ngIf]="!(marker.messageType5)">
             <div class="row">
+              <div class="col-md-2"><img src="assets/flags/{{ marker.country }}.png"></div>
               <div class="col-md-6"><b>Name unavailable</b></div>
             </div>
           </ng-template>
-        </div>
-      </ng-template>
-      <ng-template [ngIf]="marker.messageType == 'Aid-to-Navigation Report'">
-        <div id="popup-header-name" class="header-name">
-          <div class="row">
-            <div class="col-md-12">{{ marker.name }}</div>
+
+          <div id="popup-header-img" class="header-img" *ngIf="marker.messageType5">
+            <div class="row">
+              <div class="col-md-12 offset-1 shipImg">
+                <img src="assets/ships/{{ marker.messageType5.shipType.substring(0, 3) }}.jpg">
+              </div>
+            </div>
           </div>
-        </div>
-      </ng-template>
-      <div id="popup-header-img" class="header-img"></div>
+        </ng-template>
+
+        <ng-template [ngIf]="marker.messageType == 'Base Station Report' || marker.messageType == 'Standard SAR Aircraft Position Report'">
+          <div class="row">
+            <div class="col-md-1"><img src="assets/flags/{{ marker.country }}.png"></div>
+          </div>
+        </ng-template>
+
+        <ng-template [ngIf]="marker.messageType == 'Aid-to-Navigation Report'">
+          <div class="row">
+            <div class="col-md-1"><img src="assets/flags/{{ marker.country }}.png"></div>
+            <div class="col-md-11">{{ marker.name }}</div>
+          </div>
+        </ng-template>
+      </div>
+
       <div id="popup-header-type" class="header-type">
         <ng-template [ngIf]="marker.messageType == 'Position Report Class A' || marker.messageType == 'Position Report Class A (Assigned schedule)' || marker.messageType == 'Position Report Class A(Response to interrogation)'">
           <ng-template [ngIf]="marker.messageType5">
@@ -57,7 +74,7 @@
         </ng-template>
         <ng-template [ngIf]="marker.messageType == 'Base Station Report' || marker.messageType == 'Standard SAR Aircraft Position Report'">
           <div class="row">
-            <div class="col-md-6 offset-6">
+            <div class="col-md-12">
               {{ marker.messageType }}
             </div>
           </div>

@@ -247,7 +247,9 @@ export class VisualizerComponent implements OnInit{
       symbol: {
         symbolType: SymbolType.IMAGE,
         src: 'assets/' + icon,
-        size: 30
+        size: 30,
+        rotateWithView: false,
+        offset: [ 0, 9 ]
       }
     };
   }
