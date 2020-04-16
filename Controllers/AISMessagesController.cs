@@ -76,12 +76,11 @@ namespace AISvisualizer.Controllers
         {
             try
             {
-                //var saveToDb = Convert.ToBoolean(Request.Form.Keys.FirstOrDefault());
-                var saveToDb = false;
+                var saveToDb = Convert.ToBoolean(Request.Form["saveToDb"]);
                 var lineContents = _fileService.GetLineContents(files);
 
                 var decodedMessages = await _messageService.GetDecodedMessage(lineContents);
-
+                saveToDb = false;
                 if (saveToDb)
                 {
                     string iud = "add";

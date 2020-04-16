@@ -40,10 +40,10 @@ export class VisualizerComponent implements OnInit{
   latitude: number;
   longitude: number;
   zoom: number;
+  saveToDb: boolean = false;
   map: Map;
   vectorLayer: VectorLayer;
   vectorSource: VectorSource;
-
   vectorFeatures: Feature<Geometry>[];
   vectorFeatures4: Feature<Geometry>[];
   vectorFeatures9: Feature<Geometry>[];
@@ -62,10 +62,6 @@ export class VisualizerComponent implements OnInit{
   messagesType21Headers: string[] = Object.values(MessageType21Headers);
   constructor(private readonly decodeService: DecodeService, private readonly toastr: ToastrService) { }
 
-  costam(): void {
-    
-  }
-
   ngOnInit(): void {
     this.initializeMap();
 
@@ -78,8 +74,8 @@ export class VisualizerComponent implements OnInit{
     this.map = new Map({
       target: 'map',    
       view: new View({
-        center: fromLonLat([-123.87775, 49.200283]),
-        zoom: 5
+        center: fromLonLat([0, 0]),
+        zoom: 2
       })
     });
 
@@ -89,11 +85,7 @@ export class VisualizerComponent implements OnInit{
   initializePopup(): void {
     const container = document.getElementById('popup');
     const closer = document.getElementById('popup-closer');
-    const content = document.getElementById('popup-content');
-    const title = document.getElementById('popup-title');
-    const headerName = document.getElementById('popup-header-name');
-    const headerType = document.getElementById('popup-header-type');
-    const footer = document.getElementById('popup-footer');
+    container.style.display = "block";
     let marker: any;
 
     const overlay = new Overlay({
@@ -106,124 +98,25 @@ export class VisualizerComponent implements OnInit{
 
     this.map.addOverlay(overlay);
     var self = this;
+
     this.map.on('singleclick', function (evt) {
         self.marker = evt.map.forEachFeatureAtPixel(evt.pixel, function (feature) {
         let description = feature.get("description");
         return description;
         });
-      if (self.marker) {
-        let coordinate = evt.coordinate;
-        overlay.setPosition(coordinate);
-      }
-      //if (message) {
-      //  let coordinate = evt.coordinate;
-      //  let description = "";
-      //  let footer = "";
 
-      //  switch (message.messageType) {
-      //    case "Position Report Class A":
-      //    case "Position Report Class A(Assigned schedule)":
-      //    case "Position Report Class A(Response to interrogation":
-      //      if (message.messageType5) {
-      //        headerName.innerHTML = message.messageType5.vesselName;
-      //        headerType.innerHTML = message.messageType5.shipType;
-      //      } else {
-      //        headerName.innerHTML = message.messageType;
-      //        headerType.innerHTML = message.mmsi;
-      //      }
-
-      //      description = `<b>${MessageType123Headers.Date}:</b> ${message.date}<br>
-      //                  <b>Type:</b> ${message.messageType}<br>
-      //                  <b>${MessageType123Headers.MMSI}:</b> ${message.mmsi}<br>
-      //                  <b>${MessageType123Headers.Country}:</b> ${message.country}<br>
-      //                  <b>${MessageType123Headers.Status}:</b> ${message.status}<br>
-      //                  <b>${MessageType123Headers.LON}:</b> ${message.longitude}<br>
-      //                  <b>${MessageType123Headers.LAT}:</b> ${message.latitude}<br>`;
-
-      //      footer =   `${MessageType123Headers.Repeat}: ${message.repeat}<br>
-      //                  ${MessageType123Headers.Packet}: ${message.packet}<br>
-      //                  ${MessageType123Headers.Channel}: ${message.channel}<br>
-      //                  ${MessageType123Headers.ROT}: ${message.rot}<br>
-      //                  ${MessageType123Headers.SOG}: ${message.sog}<br>
-      //                  ${MessageType123Headers.Accuracy}: ${message.accuracy}<br>
-      //                  ${MessageType123Headers.COG}: ${message.cog}<br>
-      //                  ${ MessageType123Headers.HDG}: ${message.hdg} <br>
-      //                  ${MessageType123Headers.Timestamp}: ${message.timestamp}<br>
-      //                  ${ MessageType123Headers.Maneuver}: ${message.maneuver} <br>
-      //                  ${MessageType123Headers.Spare}: ${message.spare}<br>
-      //                  ${ MessageType123Headers.RAIM}: ${message.raim} <br>
-      //                  ${MessageType123Headers.Radio}: ${message.radio}<br>`;
-
-      //      break;
-      //    case "Base Station Report":
-      //      break;
-      //    case "Standard SAR Aircraft Position Report":
-      //      break;
-      //    case "Aid-to-Navigation Report":
-      //      break;
-      //  }
-
-      //  content.innerHTML = description;
-     
-      //}
+        if (self.marker) {
+          let coordinate = evt.coordinate;
+          overlay.setPosition(coordinate);
+        }
     });
+
     this.marker = marker;
     closer.onclick = function () {
       overlay.setPosition(undefined);
       closer.blur();
       return false;
     };
-  }
-
-  getMessageDescription(message: any): string {
-    let description = "";
-    switch (message.messageType) {
-      case "Position Report Class A":
-      case "Position Report Class A(Assigned schedule)":
-      case "Position Report Class A(Response to interrogation":
-        description =  `${MessageType123Headers.Date}: ${message.date}<br>
-                        Type: ${message.messageType}<br>
-                        ${MessageType123Headers.Repeat}: ${message.repeat}<br>
-                        ${MessageType123Headers.MMSI}: ${message.mmsi}<br>
-                        ${MessageType123Headers.Packet}: ${message.packet}<br>
-                        ${MessageType123Headers.Channel}: ${message.channel}<br>
-                        ${MessageType123Headers.Country}: ${message.country}<br>
-                        ${MessageType123Headers.Status}: ${message.status}<br>
-                        ${MessageType123Headers.ROT}: ${message.rot}<br>
-                        ${MessageType123Headers.SOG}: ${message.sog}<br>
-                        ${MessageType123Headers.Accuracy}: ${message.accuracy}<br>
-                        ${MessageType123Headers.LON}: ${message.longitude}<br>
-                        ${MessageType123Headers.LAT}: ${message.latitude}<br>
-                        ${MessageType123Headers.COG}: ${message.cog}<br>
-                        ${ MessageType123Headers.HDG }: ${ message.hdg } <br>
-                        ${MessageType123Headers.Timestamp}: ${message.timestamp}<br>
-                        ${ MessageType123Headers.Maneuver }: ${ message.maneuver } <br>
-                        ${MessageType123Headers.Spare}: ${message.spare}<br>
-                        ${ MessageType123Headers.RAIM }: ${ message.raim } <br>
-                        ${MessageType123Headers.Radio}: ${message.radio}<br>` 
-        break;
-      case "Base Station Report":
-        break;
-      case "Standard SAR Aircraft Position Report":
-        break;
-      case "Aid-to-Navigation Report":
-        break;
-    }
-    return description;
-  }
-
-  getFeatures(messages: MessageType1[]): Feature<Geometry>[] {
-    let vectorFeatures: Feature<Geometry>[] = [];
-    messages.forEach((message) => {
-      let feature = new Feature({
-        geometry: new Point(fromLonLat([message.longitude, message.latitude])),
-        desc: message
-      });
-
-      vectorFeatures.push(feature);
-    });
-
-    return vectorFeatures;
   }
 
   getVectorSource(messages): VectorSource {
@@ -298,25 +191,15 @@ export class VisualizerComponent implements OnInit{
     this.map.addLayer(this.pointsLayerType9);
     this.map.addLayer(this.pointsLayerType21);
 
-   // this.animate();
     this.initializePopup();
   }
 
-  animate() {
-    this.map.render();
-    window.requestAnimationFrame(this.animate);
-  }
-  clickedMethod() {
-    let num: number = 7;
-    let result: number = num + 10;
-  }
   public uploadFiles = (files) => {
     if (files.length === 0)
       return;
 
-    let saveToDb: string = String(true);
     const formData = new FormData();
-    formData.append(saveToDb, "saveToDb");
+    formData.append("saveToDb", String(this.saveToDb));
 
     for (let file of files)
       formData.append("files", file);

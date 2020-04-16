@@ -1,285 +1,296 @@
-<p>Upload</p>
-<input #file type="file" multiple (change)="uploadFiles(file.files)" />
 
-<div id="map" class="map"></div>
+  <div class="container" style="margin-bottom:10px;">
+    <p style="display:inline">
+      Upload AIS encoded txt files
+    </p>
+    <span class="btn btn-outline-primary btn-file" style="display:inline">
+      Upload <input #file type="file" multiple (change)="uploadFiles(file.files)">
+    </span>
+    <div class="form-check-inline" style="margin-left:10px">
+      <input type="checkbox" class="form-check-input" id="saveToDb"  [checked]="saveToDb" (change)="saveToDb = !saveToDb"/>
+      <label class="form-check-label" for="saveToDb">Save decoded messages to database?</label>
+    </div>
+  </div> 
 
-<div id="popup" class="ol-popup">
-  <a href="#" id="popup-closer" class="ol-popup-closer"></a>
-  <div *ngIf="marker">
-    <div id="popup-title" class="header">
-      <div id="popup-header-name" class="header-name">
-        <ng-template [ngIf]="marker.messageType == 'Position Report Class A' || marker.messageType == 'Position Report Class A (Assigned schedule)' || marker.messageType == 'Position Report Class A(Response to interrogation)'">
+  <div id="map" class="map"></div>
 
-          <ng-template [ngIf]="marker.messageType5">
+  <div id="popup" class="ol-popup" style="display:none">
+    <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+    <div *ngIf="marker">
+      <div id="popup-title" class="header">
+        <div id="popup-header-name" class="header-name">
+          <ng-template [ngIf]="marker.messageType == 'Position Report Class A' || marker.messageType == 'Position Report Class A (Assigned schedule)' || marker.messageType == 'Position Report Class A(Response to interrogation)'">
+
+            <ng-template [ngIf]="marker.messageType5">
+              <div class="row">
+                <div class="col-md-1"><img src="assets/flags/{{ marker.country }}.png"></div>
+                <div class="col-md-5">{{ marker.messageType5.vesselName }}</div>
+                <div class="col-md-6">
+                  DST<i class="fa fa-long-arrow-right" aria-hidden="true"></i> {{marker.messageType5.destination}}
+                </div>
+              </div>
+            </ng-template>
+            <ng-template [ngIf]="!(marker.messageType5)">
+              <div class="row">
+                <div class="col-md-2"><img src="assets/flags/{{ marker.country }}.png"></div>
+                <div class="col-md-6"><b>Name unavailable</b></div>
+              </div>
+            </ng-template>
+
+            <div id="popup-header-img" class="header-img" *ngIf="marker.messageType5">
+              <div class="row">
+                <div class="col-md-12 offset-1 shipImg">
+                  <img src="assets/ships/{{ marker.messageType5.shipType.substring(0, 3) }}.jpg">
+                </div>
+              </div>
+            </div>
+          </ng-template>
+
+          <ng-template [ngIf]="marker.messageType == 'Base Station Report' || marker.messageType == 'Standard SAR Aircraft Position Report'">
             <div class="row">
               <div class="col-md-1"><img src="assets/flags/{{ marker.country }}.png"></div>
-              <div class="col-md-5">{{ marker.messageType5.vesselName }}</div>
-              <div class="col-md-6">
-                DST<i class="fa fa-long-arrow-right" aria-hidden="true"></i> {{marker.messageType5.destination}}
-              </div>
-            </div>
-          </ng-template>
-          <ng-template [ngIf]="!(marker.messageType5)">
-            <div class="row">
-              <div class="col-md-2"><img src="assets/flags/{{ marker.country }}.png"></div>
-              <div class="col-md-6"><b>Name unavailable</b></div>
             </div>
           </ng-template>
 
-          <div id="popup-header-img" class="header-img" *ngIf="marker.messageType5">
+          <ng-template [ngIf]="marker.messageType == 'Aid-to-Navigation Report'">
             <div class="row">
-              <div class="col-md-12 offset-1 shipImg">
-                <img src="assets/ships/{{ marker.messageType5.shipType.substring(0, 3) }}.jpg">
-              </div>
-            </div>
-          </div>
-        </ng-template>
-
-        <ng-template [ngIf]="marker.messageType == 'Base Station Report' || marker.messageType == 'Standard SAR Aircraft Position Report'">
-          <div class="row">
-            <div class="col-md-1"><img src="assets/flags/{{ marker.country }}.png"></div>
-          </div>
-        </ng-template>
-
-        <ng-template [ngIf]="marker.messageType == 'Aid-to-Navigation Report'">
-          <div class="row">
-            <div class="col-md-1"><img src="assets/flags/{{ marker.country }}.png"></div>
-            <div class="col-md-11">{{ marker.name }}</div>
-          </div>
-        </ng-template>
-      </div>
-
-      <div id="popup-header-type" class="header-type">
-        <ng-template [ngIf]="marker.messageType == 'Position Report Class A' || marker.messageType == 'Position Report Class A (Assigned schedule)' || marker.messageType == 'Position Report Class A(Response to interrogation)'">
-          <ng-template [ngIf]="marker.messageType5">
-            <div class="row">
-              <div class="col-md-6">
-                {{ marker.messageType5.shipType }}
-              </div>
-              <div class="col-md-6">
-                <b>Type: </b>{{ marker.messageType}}<br>
-              </div>
+              <div class="col-md-1"><img src="assets/flags/{{ marker.country }}.png"></div>
+              <div class="col-md-11">{{ marker.name }}</div>
             </div>
           </ng-template>
-          <ng-template [ngIf]="!(marker.messageType5)">
-            <div class="row">
-              <div class="col-md-6">
-                {{ marker.status }}
-              </div>
-              <div class="col-md-6">
-                <b>Type: </b>{{ marker.messageType}}<br>
-              </div>
-            </div>
-          </ng-template>
-        </ng-template>
-        <ng-template [ngIf]="marker.messageType == 'Base Station Report' || marker.messageType == 'Standard SAR Aircraft Position Report'">
-          <div class="row">
-            <div class="col-md-12">
-              {{ marker.messageType }}
-            </div>
-          </div>
-        </ng-template>
-        <ng-template [ngIf]="marker.messageType == 'Aid-to-Navigation Report'">
-          <div class="row">
-            <div class="col-md-6">
-              {{ marker.aidType }}
-            </div>
-            <div class="col-md-6">
-              <b>Type: </b>{{ marker.messageType}}<br>
-            </div>
-          </div>
-        </ng-template>
-      </div>
-    </div>
-        <!--<ng-template [ngIf]="marker.messageType == 'Position Report Class A' || marker.messageType == 'Position Report Class A(Assigned schedule)' || marker.messageType == 'Position Report Class A(Response to interrogation'">
-          <div id="popup-title" class="header">
-            <div id="popup-header-name" class="header-name">
-              <ng-template [ngIf]="marker.messageType5">
-                <div class="row">
-                  <div class="col-md-6">{{ marker.messageType5.vesselName }}</div>
-                  <div class="col-md-6">
-                    DST<i class="fa fa-long-arrow-right" aria-hidden="true"></i> {{marker.messageType5.destination}}
-                  </div>
-                </div>
-              </ng-template>
-              <ng-template [ngIf]="!(marker.messageType5)">
-                <div class="row">
-                  <div class="col-md-6"><b>Name unavailable</b></div>
-                </div>
-              </ng-template>
-            </div>
-            <div id="popup-header-img" class="header-img"></div>
-            <div id="popup-header-type" class="header-type">
-              <ng-template [ngIf]="marker.messageType5">
-                <div class="row">
-                  <div class="col-md-6">
-                    {{ marker.messageType5.shipType }}
-                  </div>
-                  <div class="col-md-6">
-                    <b>Type: </b>{{ marker.messageType}}<br>
-                  </div>
-                </div>
-              </ng-template>
-              <ng-template [ngIf]="!(marker.messageType5)">
-                <div class="row">
-                  <div class="col-md-6">
-                    {{ marker.status }}
-                  </div>
-                  <div class="col-md-6">
-                    <b>Type: </b>{{ marker.messageType}}<br>
-                  </div>
-                </div>
-              </ng-template>
-            </div>
-          </div>
-        </ng-template>-->
-        <div id="popup-content" class="content">
-          <div class="row">
-            <div class="col-md-6">
-              <b>{{ messagesType123Headers[0] }}: </b>{{ marker.date | date:'short' }}<br>
-              <b>{{ messagesType123Headers[5] }}: </b>{{ marker.country}}<br>
-            </div>
-            <div class="col-md-6">
-              <b>{{ messagesType123Headers[2] }}: </b>{{ marker.mmsi}}<br>
-              <ng-template [ngIf]="marker.messageType == 'Position Report Class A' || marker.messageType == 'Position Report Class A (Assigned schedule)' || marker.messageType == 'Position Report Class A(Response to interrogation)'">
-                <b>{{ messagesType123Headers[6] }}: </b>{{ marker.status}}<br>
-              </ng-template>
-              <ng-template [ngIf]="marker.messageType == 'Base Station Report'">
-                <b>{{ messagesType4Headers[12] }}: </b>{{ marker.fixQuality}}<br>
-              </ng-template>
-              <ng-template [ngIf]="marker.messageType == 'Standard SAR Aircraft Position Report'">
-                <b>{{ messagesType9Headers[12] }}: </b>{{ marker.timestamp}}<br>
-              </ng-template>
-              <ng-template [ngIf]="marker.messageType == 'Aid-to-Navigation Report'">
-                <b>{{ messagesType21Headers[21] }}: </b>{{ marker.virtualAidFlag}}<br>
-              </ng-template>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <b>{{ messagesType123Headers[10] }}: </b>{{ marker.longitude}}<br>
-            </div>
-            <div class="col-md-6">
-              <b>{{ messagesType123Headers[11] }}: </b>{{ marker.latitude}}<br>
-            </div>
-          </div>
         </div>
-        <div class="footer">
-          <div id="popup-footer" class="footer-content">
-            <ng-template [ngIf]="marker.messageType == 'Position Report Class A' || marker.messageType == 'Position Report Class A (Assigned schedule)' || marker.messageType == 'Position Report Class A(Response to interrogation)'">
+
+        <div id="popup-header-type" class="header-type">
+          <ng-template [ngIf]="marker.messageType == 'Position Report Class A' || marker.messageType == 'Position Report Class A (Assigned schedule)' || marker.messageType == 'Position Report Class A(Response to interrogation)'">
+            <ng-template [ngIf]="marker.messageType5">
               <div class="row">
                 <div class="col-md-6">
-                  <b>{{ messagesType123Headers[1] }}: </b>{{ marker.repeat}}<br>
-                  <b>{{ messagesType123Headers[3] }}: </b>{{ marker.packet}}<br>
-                  <b>{{ messagesType123Headers[4] }}: </b>{{ marker.channel}}<br>
-                  <b>{{ messagesType123Headers[15] }}: </b>{{ marker.maneuver}}<br>
-                  <b>{{ messagesType123Headers[16] }}: </b>{{ marker.spare}}<br>
-                  <b>{{ messagesType123Headers[17] }}: </b>{{ marker.raim}}<br>
-                  <b>{{ messagesType123Headers[18] }}: </b>{{ marker.radio}}<br>
+                  {{ marker.messageType5.shipType }}
                 </div>
                 <div class="col-md-6">
-                  <b>{{ messagesType123Headers[7] }}: </b>{{ marker.rot}}<br>
-                  <b>{{ messagesType123Headers[8] }}: </b>{{ marker.sog}}<br>
-                  <b>{{ messagesType123Headers[12] }}: </b>{{ marker.cog}}<br>
-                  <b>{{ messagesType123Headers[13] }}: </b>{{ marker.hdg}}<br>
-                  <b>{{ messagesType123Headers[9] }}: </b>{{ marker.accuracy}}<br>
-                  <b>{{ messagesType123Headers[14] }}: </b>{{ marker.timestamp}}<br>
+                  <b>Type: </b>{{ marker.messageType}}<br>
                 </div>
               </div>
             </ng-template>
-            <ng-template [ngIf]="marker.messageType == 'Base Station Report'">
+            <ng-template [ngIf]="!(marker.messageType5)">
               <div class="row">
                 <div class="col-md-6">
-                  <b>{{ messagesType4Headers[6] }}: </b>{{ marker.year}}<br>
-                  <b>{{ messagesType4Headers[7] }}: </b>{{ marker.month}}<br>
-                  <b>{{ messagesType4Headers[8] }}: </b>{{ marker.day}}<br>
-                  <b>{{ messagesType4Headers[9] }}: </b>{{ marker.hour}}<br>
-                  <b>{{ messagesType4Headers[10] }}: </b>{{ marker.minute}}<br>
-                  <b>{{ messagesType4Headers[11] }}: </b>{{ marker.second}}<br>
+                  {{ marker.status }}
                 </div>
                 <div class="col-md-6">
-                  <b>{{ messagesType4Headers[15] }}: </b>{{ marker.epfd}}<br>
-                  <b>{{ messagesType4Headers[16] }}: </b>{{ marker.raim}}<br>
-                  <b>{{ messagesType4Headers[17] }}: </b>{{ marker.spare}}<br>
-                  <b>{{ messagesType4Headers[18] }}: </b>{{ marker.radioStatus}}<br>
+                  <b>Type: </b>{{ marker.messageType}}<br>
                 </div>
               </div>
             </ng-template>
-            <ng-template [ngIf]="marker.messageType == 'Standard SAR Aircraft Position Report'">
-              <div class="row">
-                <div class="col-md-6">
-                  <b>{{ messagesType9Headers[6] }}: </b>{{ marker.altitude}}<br>
-                  <b>{{ messagesType9Headers[8] }}: </b>{{ marker.accuracy}}<br>
-                  <b>{{ messagesType9Headers[7] }}: </b>{{ marker.sog}}<br>
-                  <b>{{ messagesType9Headers[11] }}: </b>{{ marker.cog}}<br>
-                  <b>{{ messagesType9Headers[13] }}: </b>{{ marker.reserved}}<br>
-                </div>
-                <div class="col-md-6">
-                  <b>{{ messagesType9Headers[14] }}: </b>{{ marker.dte}}<br>
-                  <b>{{ messagesType9Headers[15] }}: </b>{{ marker.assigned}}<br>
-                  <b>{{ messagesType9Headers[16] }}: </b>{{ marker.raim}}<br>
-                  <b>{{ messagesType9Headers[17] }}: </b>{{ marker.spare}}<br>
-                  <b>{{ messagesType9Headers[18] }}: </b>{{ marker.radioStatus}}<br>
-                </div>
-              </div>
-            </ng-template>
-            <ng-template [ngIf]="marker.messageType == 'Aid-to-Navigation Report'">
-              <div class="row">
-                <div class="col-md-6">
-                  <b>Dimensions: </b><br>
-                  <b>{{ messagesType21Headers[11] }}: </b>{{ marker.dimensionToBow}}<br>
-                  <b>{{ messagesType21Headers[12] }}: </b>{{ marker.dimensionToStern}}<br>
-                  <b>{{ messagesType21Headers[13] }}: </b>{{ marker.dimensionToPort}}<br>
-                  <b>{{ messagesType21Headers[14] }}: </b>{{ marker.dimensionToStarboard}}<br>
-                  <b>{{ messagesType21Headers[8] }}: </b>{{ marker.accuracy}}<br>
-                  <b>{{ messagesType21Headers[15] }}: </b>{{ marker.epfd}}<br>
-                </div>
-                <div class="col-md-6">
-                  <b>{{ messagesType21Headers[16] }}: </b>{{ marker.second}}<br>
-                  <b>{{ messagesType21Headers[17] }}: </b>{{ marker.offPosition}}<br>
-                  <b>{{ messagesType21Headers[18] }}: </b>{{ marker.reserved}}<br>
-                  <b>{{ messagesType21Headers[19] }}: </b>{{ marker.spare}}<br>
-                  <b>{{ messagesType21Headers[20] }}: </b>{{ marker.raim}}<br>
-                  <b>{{ messagesType21Headers[22] }}: </b>{{ marker.assigned}}<br>
-                </div>
-              </div>
-            </ng-template>
-          </div>
-          <div class="messageType5-footer" *ngIf="marker.messageType5">
+          </ng-template>
+          <ng-template [ngIf]="marker.messageType == 'Base Station Report' || marker.messageType == 'Standard SAR Aircraft Position Report'">
             <div class="row">
               <div class="col-md-12">
-                <b>Type: </b>{{ marker.messageType5.messageType }}
+                {{ marker.messageType }}
               </div>
             </div>
+          </ng-template>
+          <ng-template [ngIf]="marker.messageType == 'Aid-to-Navigation Report'">
+            <div class="row">
+              <div class="col-md-6">
+                {{ marker.aidType }}
+              </div>
+              <div class="col-md-6">
+                <b>Type: </b>{{ marker.messageType}}<br>
+              </div>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+      <!--<ng-template [ngIf]="marker.messageType == 'Position Report Class A' || marker.messageType == 'Position Report Class A(Assigned schedule)' || marker.messageType == 'Position Report Class A(Response to interrogation'">
+        <div id="popup-title" class="header">
+          <div id="popup-header-name" class="header-name">
+            <ng-template [ngIf]="marker.messageType5">
+              <div class="row">
+                <div class="col-md-6">{{ marker.messageType5.vesselName }}</div>
+                <div class="col-md-6">
+                  DST<i class="fa fa-long-arrow-right" aria-hidden="true"></i> {{marker.messageType5.destination}}
+                </div>
+              </div>
+            </ng-template>
+            <ng-template [ngIf]="!(marker.messageType5)">
+              <div class="row">
+                <div class="col-md-6"><b>Name unavailable</b></div>
+              </div>
+            </ng-template>
+          </div>
+          <div id="popup-header-img" class="header-img"></div>
+          <div id="popup-header-type" class="header-type">
+            <ng-template [ngIf]="marker.messageType5">
+              <div class="row">
+                <div class="col-md-6">
+                  {{ marker.messageType5.shipType }}
+                </div>
+                <div class="col-md-6">
+                  <b>Type: </b>{{ marker.messageType}}<br>
+                </div>
+              </div>
+            </ng-template>
+            <ng-template [ngIf]="!(marker.messageType5)">
+              <div class="row">
+                <div class="col-md-6">
+                  {{ marker.status }}
+                </div>
+                <div class="col-md-6">
+                  <b>Type: </b>{{ marker.messageType}}<br>
+                </div>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </ng-template>-->
+      <div id="popup-content" class="content">
+        <div class="row">
+          <div class="col-md-6">
+            <b>{{ messagesType123Headers[0] }}: </b>{{ marker.date | date:'short' }}<br>
+            <b>{{ messagesType123Headers[5] }}: </b>{{ marker.country}}<br>
+          </div>
+          <div class="col-md-6">
+            <b>{{ messagesType123Headers[2] }}: </b>{{ marker.mmsi}}<br>
+            <ng-template [ngIf]="marker.messageType == 'Position Report Class A' || marker.messageType == 'Position Report Class A (Assigned schedule)' || marker.messageType == 'Position Report Class A(Response to interrogation)'">
+              <b>{{ messagesType123Headers[6] }}: </b>{{ marker.status}}<br>
+            </ng-template>
+            <ng-template [ngIf]="marker.messageType == 'Base Station Report'">
+              <b>{{ messagesType4Headers[12] }}: </b>{{ marker.fixQuality}}<br>
+            </ng-template>
+            <ng-template [ngIf]="marker.messageType == 'Standard SAR Aircraft Position Report'">
+              <b>{{ messagesType9Headers[12] }}: </b>{{ marker.timestamp}}<br>
+            </ng-template>
+            <ng-template [ngIf]="marker.messageType == 'Aid-to-Navigation Report'">
+              <b>{{ messagesType21Headers[21] }}: </b>{{ marker.virtualAidFlag}}<br>
+            </ng-template>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <b>{{ messagesType123Headers[10] }}: </b>{{ marker.longitude}}<br>
+          </div>
+          <div class="col-md-6">
+            <b>{{ messagesType123Headers[11] }}: </b>{{ marker.latitude}}<br>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <div id="popup-footer" class="footer-content">
+          <ng-template [ngIf]="marker.messageType == 'Position Report Class A' || marker.messageType == 'Position Report Class A (Assigned schedule)' || marker.messageType == 'Position Report Class A(Response to interrogation)'">
+            <div class="row">
+              <div class="col-md-6">
+                <b>{{ messagesType123Headers[1] }}: </b>{{ marker.repeat}}<br>
+                <b>{{ messagesType123Headers[3] }}: </b>{{ marker.packet}}<br>
+                <b>{{ messagesType123Headers[4] }}: </b>{{ marker.channel}}<br>
+                <b>{{ messagesType123Headers[15] }}: </b>{{ marker.maneuver}}<br>
+                <b>{{ messagesType123Headers[16] }}: </b>{{ marker.spare}}<br>
+                <b>{{ messagesType123Headers[17] }}: </b>{{ marker.raim}}<br>
+                <b>{{ messagesType123Headers[18] }}: </b>{{ marker.radio}}<br>
+              </div>
+              <div class="col-md-6">
+                <b>{{ messagesType123Headers[7] }}: </b>{{ marker.rot}}<br>
+                <b>{{ messagesType123Headers[8] }}: </b>{{ marker.sog}}<br>
+                <b>{{ messagesType123Headers[12] }}: </b>{{ marker.cog}}<br>
+                <b>{{ messagesType123Headers[13] }}: </b>{{ marker.hdg}}<br>
+                <b>{{ messagesType123Headers[9] }}: </b>{{ marker.accuracy}}<br>
+                <b>{{ messagesType123Headers[14] }}: </b>{{ marker.timestamp}}<br>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template [ngIf]="marker.messageType == 'Base Station Report'">
+            <div class="row">
+              <div class="col-md-6">
+                <b>{{ messagesType4Headers[6] }}: </b>{{ marker.year}}<br>
+                <b>{{ messagesType4Headers[7] }}: </b>{{ marker.month}}<br>
+                <b>{{ messagesType4Headers[8] }}: </b>{{ marker.day}}<br>
+                <b>{{ messagesType4Headers[9] }}: </b>{{ marker.hour}}<br>
+                <b>{{ messagesType4Headers[10] }}: </b>{{ marker.minute}}<br>
+                <b>{{ messagesType4Headers[11] }}: </b>{{ marker.second}}<br>
+              </div>
+              <div class="col-md-6">
+                <b>{{ messagesType4Headers[15] }}: </b>{{ marker.epfd}}<br>
+                <b>{{ messagesType4Headers[16] }}: </b>{{ marker.raim}}<br>
+                <b>{{ messagesType4Headers[17] }}: </b>{{ marker.spare}}<br>
+                <b>{{ messagesType4Headers[18] }}: </b>{{ marker.radioStatus}}<br>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template [ngIf]="marker.messageType == 'Standard SAR Aircraft Position Report'">
+            <div class="row">
+              <div class="col-md-6">
+                <b>{{ messagesType9Headers[6] }}: </b>{{ marker.altitude}}<br>
+                <b>{{ messagesType9Headers[8] }}: </b>{{ marker.accuracy}}<br>
+                <b>{{ messagesType9Headers[7] }}: </b>{{ marker.sog}}<br>
+                <b>{{ messagesType9Headers[11] }}: </b>{{ marker.cog}}<br>
+                <b>{{ messagesType9Headers[13] }}: </b>{{ marker.reserved}}<br>
+              </div>
+              <div class="col-md-6">
+                <b>{{ messagesType9Headers[14] }}: </b>{{ marker.dte}}<br>
+                <b>{{ messagesType9Headers[15] }}: </b>{{ marker.assigned}}<br>
+                <b>{{ messagesType9Headers[16] }}: </b>{{ marker.raim}}<br>
+                <b>{{ messagesType9Headers[17] }}: </b>{{ marker.spare}}<br>
+                <b>{{ messagesType9Headers[18] }}: </b>{{ marker.radioStatus}}<br>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template [ngIf]="marker.messageType == 'Aid-to-Navigation Report'">
             <div class="row">
               <div class="col-md-6">
                 <b>Dimensions: </b><br>
-                <b>{{ messagesType5Headers[11] }}: </b>{{ marker.messageType5.dimensionToBow}}<br>
-                <b>{{ messagesType5Headers[12] }}: </b>{{ marker.messageType5.dimensionToStern}}<br>
-                <b>{{ messagesType5Headers[13] }}: </b>{{ marker.messageType5.dimensionToPort}}<br>
-                <b>{{ messagesType5Headers[14] }}: </b>{{ marker.messageType5.dimensionToStarboard}}<br>
-                <b>{{ messagesType5Headers[20] }}: </b>{{ marker.messageType5.draught}}<br>
-                <b>{{ messagesType5Headers[16] }}: </b>{{ marker.messageType5.month}}<br>
-                <b>{{ messagesType5Headers[17] }}: </b>{{ marker.messageType5.day}}<br>
+                <b>{{ messagesType21Headers[11] }}: </b>{{ marker.dimensionToBow}}<br>
+                <b>{{ messagesType21Headers[12] }}: </b>{{ marker.dimensionToStern}}<br>
+                <b>{{ messagesType21Headers[13] }}: </b>{{ marker.dimensionToPort}}<br>
+                <b>{{ messagesType21Headers[14] }}: </b>{{ marker.dimensionToStarboard}}<br>
+                <b>{{ messagesType21Headers[8] }}: </b>{{ marker.accuracy}}<br>
+                <b>{{ messagesType21Headers[15] }}: </b>{{ marker.epfd}}<br>
               </div>
               <div class="col-md-6">
-                <b>{{ messagesType5Headers[6] }}: </b>{{ marker.messageType5.aisVersion}}<br>
-                <b>{{ messagesType5Headers[7] }}: </b>{{ marker.messageType5.imoNumber}}<br>
-                <b>{{ messagesType5Headers[8] }}: </b>{{ marker.messageType5.callSign}}<br>
-                <b>{{ messagesType5Headers[15] }}: </b>{{ marker.messageType5.epfd}}<br>
-                <b>{{ messagesType5Headers[22] }}: </b>{{ marker.messageType5.spare}}<br>
-                <b>{{ messagesType5Headers[23] }}: </b>{{ marker.messageType5.dte}}<br>
-                <b>{{ messagesType5Headers[18] }}: </b>{{ marker.messageType5.hour}}<br>
-                <b>{{ messagesType5Headers[19] }}: </b>{{ marker.messageType5.minute}}<br>
+                <b>{{ messagesType21Headers[16] }}: </b>{{ marker.second}}<br>
+                <b>{{ messagesType21Headers[17] }}: </b>{{ marker.offPosition}}<br>
+                <b>{{ messagesType21Headers[18] }}: </b>{{ marker.reserved}}<br>
+                <b>{{ messagesType21Headers[19] }}: </b>{{ marker.spare}}<br>
+                <b>{{ messagesType21Headers[20] }}: </b>{{ marker.raim}}<br>
+                <b>{{ messagesType21Headers[22] }}: </b>{{ marker.assigned}}<br>
               </div>
+            </div>
+          </ng-template>
+        </div>
+        <div class="messageType5-footer" *ngIf="marker.messageType5">
+          <div class="row">
+            <div class="col-md-12">
+              <b>Type: </b>{{ marker.messageType5.messageType }}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <b>Dimensions: </b><br>
+              <b>{{ messagesType5Headers[11] }}: </b>{{ marker.messageType5.dimensionToBow}}<br>
+              <b>{{ messagesType5Headers[12] }}: </b>{{ marker.messageType5.dimensionToStern}}<br>
+              <b>{{ messagesType5Headers[13] }}: </b>{{ marker.messageType5.dimensionToPort}}<br>
+              <b>{{ messagesType5Headers[14] }}: </b>{{ marker.messageType5.dimensionToStarboard}}<br>
+              <b>{{ messagesType5Headers[20] }}: </b>{{ marker.messageType5.draught}}<br>
+              <b>{{ messagesType5Headers[16] }}: </b>{{ marker.messageType5.month}}<br>
+              <b>{{ messagesType5Headers[17] }}: </b>{{ marker.messageType5.day}}<br>
+            </div>
+            <div class="col-md-6">
+              <b>{{ messagesType5Headers[6] }}: </b>{{ marker.messageType5.aisVersion}}<br>
+              <b>{{ messagesType5Headers[7] }}: </b>{{ marker.messageType5.imoNumber}}<br>
+              <b>{{ messagesType5Headers[8] }}: </b>{{ marker.messageType5.callSign}}<br>
+              <b>{{ messagesType5Headers[15] }}: </b>{{ marker.messageType5.epfd}}<br>
+              <b>{{ messagesType5Headers[22] }}: </b>{{ marker.messageType5.spare}}<br>
+              <b>{{ messagesType5Headers[23] }}: </b>{{ marker.messageType5.dte}}<br>
+              <b>{{ messagesType5Headers[18] }}: </b>{{ marker.messageType5.hour}}<br>
+              <b>{{ messagesType5Headers[19] }}: </b>{{ marker.messageType5.minute}}<br>
             </div>
           </div>
         </div>
+      </div>
     </div>
 
-    </div>
+  </div>
 
 
-    <ng-template #fetching>
-      <p>Load File first</p>
-    </ng-template>
+  <ng-template #fetching>
+    <p>Load File first</p>
+  </ng-template>

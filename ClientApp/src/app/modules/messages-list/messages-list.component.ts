@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
 import { RepositoryService } from '../../Shared/Services/repository.service';
 import { ToastrService } from 'ngx-toastr';
 import { MdbTablePaginationComponent, MdbTableDirective } from 'angular-bootstrap-md';
@@ -14,7 +14,8 @@ import { MessageType21Headers } from '../../Shared/Helpers/messageType21Headers.
 @Component({
   selector: 'app-messages-list',
   templateUrl: './messages-list.component.html',
-  styleUrls: ['./messages-list.component.scss']
+  styleUrls: ['./messages-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MessagesListComponent<T> implements OnInit, AfterViewInit {
 
