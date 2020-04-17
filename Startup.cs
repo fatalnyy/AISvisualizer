@@ -17,6 +17,7 @@ namespace AISvisualizer
 {
     public class Startup
     {
+        public static int Progress { get; set; }
         private IConfiguration _config { get; }
         public Startup(IConfiguration configuration)
         {

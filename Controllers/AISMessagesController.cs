@@ -23,7 +23,7 @@ namespace AISvisualizer.Controllers
         private readonly IMapper _mapper;
         private readonly IDatabaseService _databaseService;
 
-        public AISMessagesController(IAISRepository repository, ILogger<AISMessagesController> logger, 
+        public AISMessagesController(IAISRepository repository, ILogger<AISMessagesController> logger,
                                         IFileService fileService, IMessageService messageService,
                                         IMapper mapper, IDatabaseService databaseService)
         {
@@ -70,7 +70,9 @@ namespace AISvisualizer.Controllers
             }
         }
 
-        [HttpPost, DisableRequestSizeLimit]
+        [HttpPost]
+        [RequestFormLimits(MultipartBodyLengthLimit = 409715200)]
+        [RequestSizeLimit(409715200)]
         [Route("DecodeFromFiles")]
         public async Task<IActionResult> DecodeFromFiles([FromForm(Name = "files")] IEnumerable<IFormFile> files)
         {
@@ -151,10 +153,18 @@ namespace AISvisualizer.Controllers
                 else return Ok(decodedMessagesVM);
             }
             catch (Exception ex)
-            { 
+            {
                 _logger.LogError($"Failed to decode AIS messages: {ex}");
                 return BadRequest("Failed to decode AIS messages");
             }
         }
+
+        [HttpGet]
+        [Route("GetProgress")]
+        public IActionResult GetProgress()
+        {
+            return Json(Startup.Progress.ToString());
+        }
+
     }
 }

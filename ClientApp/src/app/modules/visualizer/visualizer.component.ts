@@ -29,6 +29,7 @@ import { MessageType4Headers } from '../../Shared/Helpers/messageType4Headers.en
 import { MessageType5Headers } from '../../Shared/Helpers/messageType5Headers.enum';
 import { MessageType9Headers } from '../../Shared/Helpers/messageType9Headers.enum';
 import { MessageType21Headers } from '../../Shared/Helpers/messageType21Headers.enum';
+import { interval } from 'rxjs';
 
 @Component({
   selector: 'app-visualizer',
@@ -60,13 +61,15 @@ export class VisualizerComponent implements OnInit{
   messagesType5Headers: string[] = Object.values(MessageType5Headers);
   messagesType9Headers: string[] = Object.values(MessageType9Headers);
   messagesType21Headers: string[] = Object.values(MessageType21Headers);
+  progress: any;
+  subscription: any;
+
   constructor(private readonly decodeService: DecodeService, private readonly toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.initializeMap();
 
   }
-
 
   initializeMap() {
     let styleJson = 'https://api.maptiler.com/maps/topo/style.json?key=TrkPJurOFUX1t3iQOGg2';
@@ -204,11 +207,22 @@ export class VisualizerComponent implements OnInit{
     for (let file of files)
       formData.append("files", file);
 
+    this.getProgress();
     this.decodeService.decodeFromFiles(formData).subscribe(response => {
       this.decodedMessages = response;
       this.setData();
+      this.subscription.unsubscribe();
     }, error => {
         this.toastr.error(error, 'Problem!');
+    });
+  }
+
+  public getProgress(): void {
+    document.getElementById('progressBar').style.display = "block";
+    this.subscription = interval(1000).subscribe(() => {
+      this.decodeService.getProgress().subscribe(response => {
+        this.progress = response;
+      });
     });
   }
 }

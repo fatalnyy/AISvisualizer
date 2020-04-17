@@ -12,6 +12,8 @@ namespace AISvisualizer.Services
 {
     public class FileService : IFileService
     {
+        private int linesCount;
+        private int currentLine;
         private readonly ILogger<FileService> _logger;
         public FileService(ILogger<FileService> logger)
         {
@@ -19,16 +21,23 @@ namespace AISvisualizer.Services
         }
         public async IAsyncEnumerable<LineContent> GetLineContents(IEnumerable<IFormFile> files)
         {
+            Startup.Progress = 0;
+            currentLine = 0;
+            linesCount = GetLinesCount(files);
+
             foreach (var file in files)
             {
-                using (var reader = new StreamReader(files.FirstOrDefault().OpenReadStream()))
+                using (var reader = new StreamReader(file.OpenReadStream()))
                 {
                     while (reader.Peek() >= 0)
                     {
                         var line = await reader.ReadLineAsync();
-
+                        
                         if (string.IsNullOrWhiteSpace(line))
                             continue;
+
+                        currentLine++;
+                        Startup.Progress = (int)(((float)currentLine / (float)linesCount) * 100);
 
                         var splittedLine = Regex.Split(line, "\t");
                         var splittedAISmessage = Regex.Split(splittedLine[2], ",");
@@ -76,6 +85,19 @@ namespace AISvisualizer.Services
         public bool CheckHeader(string header)
         {
             return header == "!AIVDM" || header == "!AIVDO";
+        }
+
+        private int GetLinesCount(IEnumerable<IFormFile> files)
+        {
+            int linesCount = 0;
+            foreach (var file in files)
+            {
+                var reader = new StreamReader(file.OpenReadStream()).ReadToEnd();
+                var lines = reader.Split(new char[] { '\n' });
+                linesCount += lines.Count();
+            }
+
+            return linesCount;
         }
     }
 }

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { DecodedMessages } from '../Models/decodedMessages.interface';
+import { Content } from '@angular/compiler/src/render3/r3_ast';
 
 
 @Injectable({
@@ -15,5 +16,9 @@ export class DecodeService {
 
   decodeFromFiles(files: FormData): Observable<DecodedMessages> {
     return this.http.post<DecodedMessages>(`${environment.aisMessagesAPI}/DecodeFromFiles`, files);
+  }
+
+  getProgress(): Observable<any> {
+    return this.http.get<any>(`${environment.aisMessagesAPI}/GetProgress`);
   }
 }
