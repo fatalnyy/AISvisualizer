@@ -139,15 +139,8 @@ namespace AISvisualizer.Controllers
                     message.MessageType5 = decodedMessages.MessagesType5.Where(p => p.MMSI == message.MMSI).FirstOrDefault();
                 foreach (var message in decodedMessagesVM.MessagesType3)
                     message.MessageType5 = decodedMessages.MessagesType5.Where(p => p.MMSI == message.MMSI).FirstOrDefault();
-                var messages = new List<MessageType1ViewModel>();
-                foreach (var item in decodedMessagesVM.MessagesType1)
-                {
-                    if (item.Latitude <= -90.0 || item.Latitude >= 90.0) continue;
-                    if (item.Longitude <= -180.0 || item.Longitude >= 180.0) continue;
 
-                    messages.Add(item);
-                }
-                decodedMessagesVM.MessagesType1 = messages;
+                //decodedMessages.MessagesType1 = decodedMessages.MessagesType1.Where(p => p.Longitude > -180.0 && p.Longitude < 180.0 && p.Latitude > -90.0 && p.Latitude < 90.0).ToList();
 
                 if (saveToDb) return Created("api/messages-list", decodedMessagesVM);
                 else return Ok(decodedMessagesVM);

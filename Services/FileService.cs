@@ -87,7 +87,7 @@ namespace AISvisualizer.Services
             return header == "!AIVDM" || header == "!AIVDO";
         }
 
-        private int GetLinesCount(IEnumerable<IFormFile> files)
+        public int GetLinesCount(IEnumerable<IFormFile> files)
         {
             int linesCount = 0;
             foreach (var file in files)

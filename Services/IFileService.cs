@@ -11,5 +11,6 @@ namespace AISvisualizer.Services
     {
         IAsyncEnumerable<LineContent> GetLineContents(IEnumerable<IFormFile> files);
         bool CheckHeader(string header);
+        int GetLinesCount(IEnumerable<IFormFile> files);
     }
 }

@@ -38,9 +38,6 @@ import { interval } from 'rxjs';
 })
 export class VisualizerComponent implements OnInit{
   decodedMessages: DecodedMessages;
-  latitude: number;
-  longitude: number;
-  zoom: number;
   saveToDb: boolean = false;
   map: Map;
   vectorLayer: VectorLayer;
@@ -61,7 +58,7 @@ export class VisualizerComponent implements OnInit{
   messagesType5Headers: string[] = Object.values(MessageType5Headers);
   messagesType9Headers: string[] = Object.values(MessageType9Headers);
   messagesType21Headers: string[] = Object.values(MessageType21Headers);
-  progress: any;
+  progress: string;
   subscription: any;
 
   constructor(private readonly decodeService: DecodeService, private readonly toastr: ToastrService) { }
@@ -71,7 +68,7 @@ export class VisualizerComponent implements OnInit{
 
   }
 
-  initializeMap() {
+  initializeMap(): void {
     let styleJson = 'https://api.maptiler.com/maps/topo/style.json?key=TrkPJurOFUX1t3iQOGg2';
 
     this.map = new Map({
@@ -208,6 +205,7 @@ export class VisualizerComponent implements OnInit{
       formData.append("files", file);
 
     this.getProgress();
+
     this.decodeService.decodeFromFiles(formData).subscribe(response => {
       this.decodedMessages = response;
       this.setData();
