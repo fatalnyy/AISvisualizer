@@ -25,7 +25,7 @@ namespace AISvisualizer.Data
             }
             catch (Exception ex)
             {
-                _logger.LogInformation($"Failed to get all messages {ex}");
+                _logger.LogInformation($"Failed to get messages {ex}");
                 return null;
             }
         }
@@ -47,6 +47,7 @@ namespace AISvisualizer.Data
                 _logger.LogInformation($"Failed to add decoded messages: {ex}");
             }
         }
+
         public bool SaveAll()
         {
             return _ctx.SaveChanges() > 0;

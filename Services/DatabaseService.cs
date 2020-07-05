@@ -55,6 +55,54 @@ namespace AISvisualizer.Services
             }
         }
 
+        public void SaveDecodedMessages(DecodedMessages decodedMessages)
+        {
+            string iud = "add";
+            DataTable dataTable;
+
+            if (decodedMessages.MessagesType1.Count > 0)
+            {
+                dataTable = GetDataTableParameter(decodedMessages.MessagesType1, (Int16)Enums.Enums.MessageTypes.MessageType1);
+                if (dataTable != null && dataTable.Rows.Count > 0) RunPrcDataTableType(iud, "dbo.prc_addMessageType123", dataTable);
+            }
+
+            if (decodedMessages.MessagesType2.Count > 0)
+            {
+                dataTable = GetDataTableParameter(decodedMessages.MessagesType2, (Int16)Enums.Enums.MessageTypes.MessageType2);
+                if (dataTable != null && dataTable.Rows.Count > 0) RunPrcDataTableType(iud, "dbo.prc_addMessageType123", dataTable);
+            }
+
+            if (decodedMessages.MessagesType3.Count > 0)
+            {
+                dataTable = GetDataTableParameter(decodedMessages.MessagesType3, (Int16)Enums.Enums.MessageTypes.MessageType3);
+                if (dataTable != null && dataTable.Rows.Count > 0) RunPrcDataTableType(iud, "dbo.prc_addMessageType123", dataTable);
+            }
+
+            if (decodedMessages.MessagesType4.Count > 0)
+            {
+                dataTable = GetDataTableParameter(decodedMessages.MessagesType4);
+                if (dataTable != null && dataTable.Rows.Count > 0) RunPrcDataTableType(iud, "dbo.prc_addMessageType4", dataTable);
+            }
+
+            if (decodedMessages.MessagesType5.Count > 0)
+            {
+                dataTable = GetDataTableParameter(decodedMessages.MessagesType5);
+                if (dataTable != null && dataTable.Rows.Count > 0) RunPrcDataTableType(iud, "dbo.prc_addMessageType5", dataTable);
+            }
+
+            if (decodedMessages.MessagesType9.Count > 0)
+            {
+                dataTable = GetDataTableParameter(decodedMessages.MessagesType9);
+                if (dataTable != null && dataTable.Rows.Count > 0) RunPrcDataTableType(iud, "dbo.prc_addMessageType9", dataTable);
+            }
+
+            if (decodedMessages.MessagesType21.Count > 0)
+            {
+                dataTable = GetDataTableParameter(decodedMessages.MessagesType21);
+                if (dataTable != null && dataTable.Rows.Count > 0) RunPrcDataTableType(iud, "dbo.prc_addMessageType21", dataTable);
+            }
+        }
+
         public DataTable GetDataTableParameter(IEnumerable<MessageType1> messages, int type)
         {
             DataTable dt = new DataTable();

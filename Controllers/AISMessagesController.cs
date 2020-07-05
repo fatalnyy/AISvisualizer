@@ -82,54 +82,8 @@ namespace AISvisualizer.Controllers
                 var lineContents = _fileService.GetLineContents(files);
 
                 var decodedMessages = await _messageService.GetDecodedMessage(lineContents);
-                saveToDb = false;
-                if (saveToDb)
-                {
-                    string iud = "add";
-                    DataTable dataTable;
 
-                    if (decodedMessages.MessagesType1.Count > 0)
-                    {
-                        dataTable = _databaseService.GetDataTableParameter(decodedMessages.MessagesType1, (Int16)Enums.Enums.MessageTypes.MessageType1);
-                        if (dataTable != null && dataTable.Rows.Count > 0) _databaseService.RunPrcDataTableType(iud, "dbo.prc_addMessageType123", dataTable);
-                    }
-
-                    if (decodedMessages.MessagesType2.Count > 0)
-                    {
-                        dataTable = _databaseService.GetDataTableParameter(decodedMessages.MessagesType2, (Int16)Enums.Enums.MessageTypes.MessageType2);
-                        if (dataTable != null && dataTable.Rows.Count > 0) _databaseService.RunPrcDataTableType(iud, "dbo.prc_addMessageType123", dataTable);
-                    }
-
-                    if (decodedMessages.MessagesType3.Count > 0)
-                    {
-                        dataTable = _databaseService.GetDataTableParameter(decodedMessages.MessagesType3, (Int16)Enums.Enums.MessageTypes.MessageType3);
-                        if (dataTable != null && dataTable.Rows.Count > 0) _databaseService.RunPrcDataTableType(iud, "dbo.prc_addMessageType123", dataTable);
-                    }
-
-                    if (decodedMessages.MessagesType4.Count > 0)
-                    {
-                        dataTable = _databaseService.GetDataTableParameter(decodedMessages.MessagesType4);
-                        if (dataTable != null && dataTable.Rows.Count > 0) _databaseService.RunPrcDataTableType(iud, "dbo.prc_addMessageType4", dataTable);
-                    }
-
-                    if (decodedMessages.MessagesType5.Count > 0)
-                    {
-                        dataTable = _databaseService.GetDataTableParameter(decodedMessages.MessagesType5);
-                        if (dataTable != null && dataTable.Rows.Count > 0) _databaseService.RunPrcDataTableType(iud, "dbo.prc_addMessageType5", dataTable);
-                    }
-
-                    if (decodedMessages.MessagesType9.Count > 0)
-                    {
-                        dataTable = _databaseService.GetDataTableParameter(decodedMessages.MessagesType9);
-                        if (dataTable != null && dataTable.Rows.Count > 0) _databaseService.RunPrcDataTableType(iud, "dbo.prc_addMessageType9", dataTable);
-                    }
-
-                    if (decodedMessages.MessagesType21.Count > 0)
-                    {
-                        dataTable = _databaseService.GetDataTableParameter(decodedMessages.MessagesType21);
-                        if (dataTable != null && dataTable.Rows.Count > 0) _databaseService.RunPrcDataTableType(iud, "dbo.prc_addMessageType21", dataTable);
-                    }
-                }
+                if (saveToDb) _databaseService.SaveDecodedMessages(decodedMessages);
 
                 var decodedMessagesVM = _mapper.Map<DecodedMessages, DecodedMessagesViewModel>(decodedMessages);
 
@@ -139,8 +93,6 @@ namespace AISvisualizer.Controllers
                     message.MessageType5 = decodedMessages.MessagesType5.Where(p => p.MMSI == message.MMSI).FirstOrDefault();
                 foreach (var message in decodedMessagesVM.MessagesType3)
                     message.MessageType5 = decodedMessages.MessagesType5.Where(p => p.MMSI == message.MMSI).FirstOrDefault();
-
-                //decodedMessages.MessagesType1 = decodedMessages.MessagesType1.Where(p => p.Longitude > -180.0 && p.Longitude < 180.0 && p.Latitude > -90.0 && p.Latitude < 90.0).ToList();
 
                 if (saveToDb) return Created("api/messages-list", decodedMessagesVM);
                 else return Ok(decodedMessagesVM);

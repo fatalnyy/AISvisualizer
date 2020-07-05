@@ -6,9 +6,6 @@ import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { HomeComponent } from './home/home.component';
-import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { VisualizerComponent } from './modules/visualizer/visualizer.component';
 import { VisualizerModule } from './modules/visualizer/visualizer.module';
 import { MessagesListModule } from './modules/messages-list/messages-list.module';
@@ -21,9 +18,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
   declarations: [
     AppComponent,
     NavMenuComponent,
-    HomeComponent,
-    CounterComponent,
-    FetchDataComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -36,8 +30,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     MDBBootstrapModule.forRoot(),
     RouterModule.forRoot([
       { path: '', component: VisualizerComponent, pathMatch: 'full' },
-      { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent },
       { path: 'messages', component: MessagesListComponent },
     ])
   ],

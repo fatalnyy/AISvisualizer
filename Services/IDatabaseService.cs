@@ -13,5 +13,6 @@ namespace AISvisualizer.Services
         DataTable GetDataTableParameter(IEnumerable<MessageType5> messages);
         DataTable GetDataTableParameter(IEnumerable<MessageType9> messages);
         long RunPrcDataTableType(string iud, string prc_name, DataTable dt);
+        void SaveDecodedMessages(DecodedMessages decodedMessages);
     }
 }

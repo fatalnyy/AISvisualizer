@@ -26,7 +26,10 @@ namespace AISvisualizer.Services
         public Int16 GetInt16(int startIndex, int length)
         {
             var binValue = _extractService.ExtractBinaryFieldValue(BinaryPayload, startIndex, length);
-            var value = Convert.ToInt16(binValue, 2);
+            Int16 value = 0;
+
+            if (!string.IsNullOrWhiteSpace(binValue))
+                value = Convert.ToInt16(binValue, 2);
 
             return value;
         }
@@ -162,12 +165,6 @@ namespace AISvisualizer.Services
         {
             var timeStamp = GetInt16(startIndex, length);
 
-            //if (timeStamp == 60) return "Not available";
-            //else if (timeStamp == 61) return "System in manual input mode";
-            //else if (timeStamp == 62) return "System in estimated mode";
-            //else if (timeStamp == 63) return "System inoperative";
-
-            //return string.Format("{0}", timeStamp.ToString());
             return timeStamp;
         }
 
